@@ -79,61 +79,6 @@
   </entry>
   
   <entry>
-    <title>K210学习及代码记录</title>
-    <link href="https://lzule.github.io/2023/08/20/K210_Study/"/>
-    <id>https://lzule.github.io/2023/08/20/K210_Study/</id>
-    <published>2023-08-20T13:45:49.173Z</published>
-    <updated>2024-02-17T15:31:48.588Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="/images/K210/K210_pic.png" alt="cover"></p><h4 id="一、背景">一、背景</h4><p>    前段时间打电赛的时候，无意中发现了类似Jetson Nano的高性能人工智能嵌入式开发套件K210，于是买了一块K210用来平时无事学习，用这篇博客记录学习中的遇到的问题以及记录比较有意义的代码</p><h4 id="二、学习记录">二、学习记录</h4><p>    这部分以模块的形式来进行问题与代码记录，具体详情如下：</p><h5 id="1、有用语句学习">1、有用语句学习</h5><ul><li>得到一个颜色未(0, 81, 137)的背景图  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">img &#x3D; image.Image(size&#x3D;(lcd.width(), lcd.height()))img.draw_rectangle((0, 0, lcd.width(), lcd.height()), fill&#x3D;True, color&#x3D;(0, 81, 137))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li></ul><h5 id="2、基础模块的学习">2、基础模块的学习</h5><h6 id="2-1-按键K1控制LED的颜色">2.1 按键K1控制LED的颜色</h6><ul><li><p>具体功能：<br>使用K1按键改变LED灯的颜色，并通过led屏幕显示出当前的发光模式</p></li><li><p>相关函数：<br>主要使用了ybrgb库中的设置LED显示函数set(x, x, x)以及ybkey库中的判断按键是否按下函数is_press()</p><ul><li>set(red_set, green_set, blue_set)<ul><li>red_set表示红色的控制亮灭，其中1表示亮，0表示灭。green_set和blue_set同理</li></ul></li><li>is_press()<ul><li>返回值为1表示检测到K1按键按下，返回值0表示未检测到K1按键按下</li></ul></li></ul></li><li><p>具体代码：</p>  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># Untitled - By: HP - 周日 8月 20 2023import time, lcd, imagefrom modules import ybkey, ybrgblcd.init()lcd.clear(lcd.WHITE)RGB &#x3D; ybrgb()Key &#x3D; ybkey()mode &#x3D; 0while True:    if Key.is_press():        time.sleep_ms(20)        while Key.is_press():            pass        mode +&#x3D; 1        mode %&#x3D; 8     if mode &#x3D;&#x3D; 0:        RGB.set(0, 0, 0)    elif mode &#x3D;&#x3D; 1:        RGB.set(0, 0, 1)    elif mode &#x3D;&#x3D; 2:        RGB.set(0, 1, 0)    elif mode &#x3D;&#x3D; 3:        RGB.set(0, 1, 1)    elif mode &#x3D;&#x3D; 4:        RGB.set(1, 0, 0)    elif mode &#x3D;&#x3D; 5:        RGB.set(1, 0, 1)    elif mode &#x3D;&#x3D; 6:        RGB.set(1, 1, 0)    elif mode &#x3D;&#x3D; 7:        RGB.set(1, 1, 1)        lcd.draw_string(140, 120, &quot;Mode:&quot; + str(mode), lcd.BLACK, lcd.WHITE)    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li></ul><h6 id="2-2-使用定时器中断运行函数">2.2 使用定时器中断运行函数</h6><ul><li><p>具体功能：<br>使用定时器中断来处理事件on_timer函数</p></li><li><p>相关函数：<br>主要使用到了Timer库中的Timer定时器配置函数</p><ul><li>Timer(id, channel, mode=Timer.MODE_ONE_SHOT, period=1000, unit=Timer.UNIT_MS, callback=None, arg=None, start=True, priority=1, div=0)<ul><li>id : Timer ID, [0~2] (Timer.TIMER0~TIMER2)</li><li>channel : Timer 通道, [Timer.CHANNEL0~Timer.CHANNEL3]</li><li>mode : Timer 模式, MODE_ONE_SHOT 或者 MODE_PERIODIC 或者 MODE_PWM</li><li>period : Timer 周期, 在启动定时器后 period 时间， 回调函数将会被调用，(0,~)</li><li>unit : 设置周期的单位，默认位毫秒（ ms ），Timer.UNIT_S 或者 Timer.UNIT_MS 或者 Timer.UNIT_US 或者 Timer.UNIT_NS</li><li>callback : 定时器回调函数， 定义了两个参数， 一个是定时器对象 Timer ， 第二个是在定义对象时希望传的参数 arg ，更多请看 arg 参数解释</li><li>arg : 希望传给回调函数的参数，作为回调函数的第二个参数</li><li>start : 是否在对象构建成功后立即开始定时器， True ：立即开始； False :不立即开启，需要调用 start() 函数来启动定时器</li><li>priority : 硬件定时器中断优先级， 与特定的CPU相关， 在K210中，取值范围是[1,7]， 值越小优先级越高</li><li>div : 硬件定时器分频器，取值范围[0,255]， 默认为0， clk_timer（定时器时钟频率） = clk_pll0（锁相环0频率）/2^(div+1)</li></ul></li><li>on_timer(timer)<ul><li>该函数可以理解为定时器中断函数，即每隔一确定时间该函数就会执行一次</li></ul></li></ul></li><li><p>具体代码：</p>  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># Untitled - By: HP - 周日 8月 20 2023from machine import Timerimport timedef on_timer(timer):    print(&quot;This is on_timer callback&quot;)timer &#x3D; Timer(Timer.TIMER0, Timer.CHANNEL0,            mode&#x3D;Timer.MODE_PERIODIC, period&#x3D;100,            unit&#x3D;Timer.UNIT_MS, callback&#x3D;on_timer, arg&#x3D;None)while True:    pass<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li></ul><h6 id="2-3-使用PWM控制呼吸灯">2.3 使用PWM控制呼吸灯</h6><ul><li><p>具体功能：<br>使用定时器的PWM模式来实现呼吸灯的效果</p></li><li><p>相关函数：<br>主要使用到了machine库中的Timer定时器配置函数和PWM的配置函数</p><ul><li>Timer(Timer.TIMER0, Timer.CHANNEL0, mode=Timer.MODE_PWM)<ul><li>Timer.MODE_PWM：这里主要使用了定时器0的通道0作为PWM输出模型</li><li>其余的参数不需要配置</li></ul></li><li>PWM(tim, freq, duty, pin, enable=True)<ul><li>tim : 每个PWM依赖一个定时器来产生波形， 所以这里需要传一个定时器对象，这个定时器对象必须初始化时必须指定定时器 ID 和通道号</li><li>freq ： PWM 波形频率</li><li>duty ： PWM 占空比， 指高电平占整个周期的百分比，取值：[0,100]</li><li>pin ： PWM 输出引脚。 实际物理引脚IO编号。</li><li>enable ： 是否立即开始产生波形，默认位 True ，及对象生成后立即开始在指定的引脚上产生PWM 波形</li></ul></li></ul></li><li><p>具体代码：</p>  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># Untitled - By: HP - 周一 8月 21 2023from machine import Timer, PWMfrom modules import ybrgb, ybkeyimport time# RED&#x3D;27, GREEN&#x3D;26, BLUE&#x3D;29# LED_PIN &#x3D; 26RGB &#x3D; ybrgb()RGB.set(0, 0, 0)mode &#x3D; 0tim1 &#x3D; Timer(Timer.TIMER0, Timer.CHANNEL0, mode&#x3D;Timer.MODE_PWM)tim2 &#x3D; Timer(Timer.TIMER0, Timer.CHANNEL1, mode&#x3D;Timer.MODE_PWM)tim3 &#x3D; Timer(Timer.TIMER0, Timer.CHANNEL2, mode&#x3D;Timer.MODE_PWM)pwm1 &#x3D; PWM(tim1, freq&#x3D;500000, duty&#x3D;0, pin&#x3D;27)pwm2 &#x3D; PWM(tim2, freq&#x3D;500000, duty&#x3D;0, pin&#x3D;26)pwm3 &#x3D; PWM(tim3, freq&#x3D;500000, duty&#x3D;0, pin&#x3D;29)duty_Red &#x3D; 0duty_Green &#x3D; 0duty_Blue &#x3D; 0while True:    pwm1.duty(duty_Red)    pwm2.duty(duty_Green)    pwm3.duty(duty_Blue)    duty_Red +&#x3D; 5    duty_Red %&#x3D; 100    duty_Green +&#x3D; 5    duty_Green %&#x3D; 100    duty_Blue +&#x3D; 5    duty_Blue %&#x3D; 100    time.sleep(0.08)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li><li><p>注意事项：<br>K210的LED灯内部有三个小灯，颜色分别为红、绿、蓝，在每次使用LED时，首先使用RGB.set(0, 0, 0)对其进行初始化，然后再进行PWM控制一个灯的亮度。因为如果我前一次测试的时绿灯引脚的PWM，这一次我要测试红灯引脚的PWN，如果不对灯进行set(0, 0, 0)的话，那么上一次绿灯仍是亮的，发光颜色就会收到干扰。</p></li></ul><h6 id="2-4-使用触摸屏">2.4 使用触摸屏</h6><ul><li><p>具体功能：<br>可以使用手指触摸屏幕来实现绘制图画。</p></li><li><p>相关函数：<br>主要使用到了touchscreen库中的read获取触摸屏状态及坐标函数</p><ul><li>(status, x, y) = ts.read()<ul><li>status：指当前触摸屏的状态，取值有三种：STATUS_RELEASE（等于1）表示当前未触摸屏幕；STATUS_PRESS（等于2）表示当前只是点击了一下屏幕；STATUS_MOVE（等于3）表示当前持续滑动着屏幕</li><li>x， y：表示当前触摸点所在屏幕上的坐标</li></ul></li><li>ts.STATUS_IDLE：该值为0</li></ul></li><li><p>具体代码：</p>  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># Untitled - By: HP - 周一 8月 21 2023import touchscreen as tsimport lcd, imageimport timelcd.init()ts.init()img &#x3D; image.Image()  # 默认读取的是一张黑色图片#print(img)img.draw_string(40, 0, &quot;Please touch the screen&quot;, color&#x3D;(0, 0, 255), scale&#x3D;2)status_last &#x3D; ts.STATUS_IDLEprint(status_last)x_last &#x3D; 0y_last &#x3D; 0while True:    (status, x, y) &#x3D; ts.read()  # 获取触摸屏的状态    if status_last !&#x3D; status:        print(status, x, y)     # 如果状态发生了变化，则输出        status_last &#x3D; status    if status &#x3D;&#x3D; ts.STATUS_MOVE:  # 如果是连续滑动模式，则绘制直线        print(str(status) + &quot;:line&quot;)        img.draw_line(x_last, y_last, x, y)    elif status &#x3D;&#x3D; ts.STATUS_PRESS:  # 如果是点击模式，则绘制一点        print(str(status) + &quot;:point&quot;)        img.draw_line(x, y, x, y)    lcd.display(img)    x_last &#x3D; x    y_last &#x3D; y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li></ul><h6 id="2-5-打开摄像头并显示">2.5 打开摄像头并显示</h6><ul><li><p>具体功能：<br>打开K210摄像头并将画面显示到lcd显示屏上，在左上角显示出当前的帧数</p></li><li><p>相关函数：<br>主要使用到了sensor库中的摄像头配置与画面获取等函数和lcd库中的显示屏初始化以及显示函数</p><ul><li>sensor.set_pixformat(format)<ul><li>用于设置摄像头的输出格式，参数format表示帧格式，可选帧格式有sensor.RGB565、sensor.GRAYSCALE、sensor.YUV422</li></ul></li><li>sensor.set_framesize(framesize)<ul><li>用于设置摄像头输出帧大小，K210最大支持VGA格式，大于VGA将无法获取图像，framesize表示帧大小，可选参数有sensor.VGA(640<em>480)、sensor.QVGA(320</em>240)、sensor.QQVGA(160<em>120)。由于屏幕分辨率大小为320</em>240，故QVGA最为合适</li></ul></li><li>sensor.run(enable)<ul><li>用于图像捕捉功能控制，参数enable：1表示开始抓取图像，0表示停止抓取图像</li></ul></li><li>sensor.skip_frames(n, [, time])<ul><li>表示跳过指定帧或者跳过指定时间内的图像，让相机图像在改变相机设置后稳定下来。参数n：表示跳过n帧图像；参数time：表示跳过指定时间，单位为ms，若n与time皆未指定，该方法跳过300ms的帧；若二者皆指定，该方法会跳过n数量的帧，但将在time ms后返回</li></ul></li><li>clock = time.clock() … clock.tick() … clock.fps()<ul><li>上述三个操作用来计算当前的帧率fps</li></ul></li></ul></li><li><p>具体代码：</p>  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># Untitled - By: HP - 周一 8月 21 2023import sensor, lcdimport timelcd.init()sensor.reset()sensor.set_pixformat(sensor.RGB565)sensor.set_framesize(sensor.QVGA)sensor.run(1)sensor.skip_frames(10)clock &#x3D; time.clock()while(True):    clock.tick()    img &#x3D; sensor.snapshot()    fps &#x3D; clock.fps()    img.draw_string(0, 0, &quot;%2dfps&quot; %(fps), color&#x3D;(0, 0, 255), scale&#x3D;2.0)    lcd.display(img)    print(fps)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li></ul><h5 id="3、高级模块的学习">3、高级模块的学习</h5>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;&lt;img src=&quot;/images/K210/K210_pic.png&quot; alt=&quot;cover&quot;&gt;&lt;/p&gt;
-&lt;h4 id=&quot;一、背景&quot;&gt;一、背景&lt;/h4&gt;
-&lt;p&gt;    前段时间打电赛的时候，无意中发现了类似Jetson Nano的高性能人工智能嵌入式开发套件K210，于是</summary>
-      
-    
-    
-    
-    <category term="载板开发" scheme="https://lzule.github.io/categories/%E8%BD%BD%E6%9D%BF%E5%BC%80%E5%8F%91/"/>
-    
-    
-    <category term="K210" scheme="https://lzule.github.io/tags/K210/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Git操作常用指令</title>
-    <link href="https://lzule.github.io/2023/06/19/github_command/"/>
-    <id>https://lzule.github.io/2023/06/19/github_command/</id>
-    <published>2023-06-19T13:00:47.859Z</published>
-    <updated>2023-09-05T08:59:25.417Z</updated>
-    
-    <content type="html"><![CDATA[<ul><li><p>git config --global</p></li><li><p>git pull origin main<br>保持本地与GitHub仓库内容一致</p></li></ul>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;git config --global&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;git pull origin main&lt;br&gt;
-保持本地与GitHub仓库内容一致&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-</summary>
-      
-    
-    
-    
-    
-  </entry>
-  
-  <entry>
     <title>关于在Jetson部署Yolov5实现检测与串口通信传送位置信息</title>
     <link href="https://lzule.github.io/2023/06/14/ocean_competC2/"/>
     <id>https://lzule.github.io/2023/06/14/ocean_competC2/</id>
