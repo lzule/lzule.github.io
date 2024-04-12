@@ -28,7 +28,19 @@ sudo nano /etc/gdm3/custom.conf
 首先进入root模式  sudo su  # 进入root模式，输入exit退出root模式
 sudo visudo  # 编辑该文件
 
-然后按下图红框进行修改，其..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2024/03/27/Self_Start/">更多</a></section></article><article class="post-item-card"><header class="is-relative is-flex"><div class="post-cover-backdrop is-hidden"><img src="/images/Jetson/jetson_ruitai_pic.png" alt="loading.."></div><a class="post-cover-link has-text-centered skeleton" href="/2023/05/18/Jetson%20NX/"><img class="post-cover-img js-img-fadeIn" src="/images/Jetson/jetson_ruitai_pic.png" alt="loading.." data-backdrop="true"></a></header><section class="content post-card-content p-4 pb-5"><header><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/Pytorch"><i class="tag post-item-tag">Pytorch</i></a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><i class="tag post-item-tag">深度学习</i></a></header><h2 class="mt-4 mb-0 is-family-serif"><a href="/2023/05/18/Jetson%20NX/">关于Jetson的系统烧录与环境配置</a></h2><time class="has-text-grey" datetime="2023-05-18T08:07:49.654Z">2023-05-18</time><p class="is-flex-grow-2 mt-2">
+然后按下图红框进行修改，其..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2024/03/27/Self_Start/">更多</a></section></article><article class="post-item-card"><header class="is-relative is-flex"><div class="post-cover-backdrop is-hidden"><img src="/images/PyQt/pyqt_pic.png" alt="loading.."></div><a class="post-cover-link has-text-centered skeleton" href="/2024/03/20/PyQt_help/"><img class="post-cover-img js-img-fadeIn" src="/images/PyQt/pyqt_pic.png" alt="loading.." data-backdrop="true"></a></header><section class="content post-card-content p-4 pb-5"><header><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/PyQt5"><i class="tag post-item-tag">PyQt5</i></a></header><h2 class="mt-4 mb-0 is-family-serif"><a href="/2024/03/20/PyQt_help/">Jetson Nano安装并使用PyQt5进行界面开发设计</a></h2><time class="has-text-grey" datetime="2024-03-20T09:48:33.913Z">2024-03-20</time><p class="is-flex-grow-2 mt-2">
+问题背景
+这个问题是我在做海草项目时，要在上位机Jetson Nano上制作相关界面，由于第一次接触该方面，由此写下该篇博客对其进行记录。
+一、安装PyQt5
+
+使用以下命令安装： sudo apt install pyqt5*
+sudo apt-get install python3-pyqt5
+
+导入PyQt5包至Python虚拟环境
+如果你需要在虚拟环境中使用PyQt5，按如下步骤将系统的PyQt5库链接到你的虚拟环境中
+
+首先在终端执行以下指令查找编译好的PyQt5库相关文件的路径  sudo find / -iname &quot;PyQt5*&quot; # 得到类似路径/usr/lib/python3/dist-packages/PyQt5
+sudo find / -iname &quot;*sip*&quot;   # 得到类似..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2024/03/20/PyQt_help/">更多</a></section></article><article class="post-item-card"><header class="is-relative is-flex"><div class="post-cover-backdrop is-hidden"><img src="/images/Jetson/jetson_ruitai_pic.png" alt="loading.."></div><a class="post-cover-link has-text-centered skeleton" href="/2023/05/18/Jetson%20NX/"><img class="post-cover-img js-img-fadeIn" src="/images/Jetson/jetson_ruitai_pic.png" alt="loading.." data-backdrop="true"></a></header><section class="content post-card-content p-4 pb-5"><header><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/Pytorch"><i class="tag post-item-tag">Pytorch</i></a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><i class="tag post-item-tag">深度学习</i></a></header><h2 class="mt-4 mb-0 is-family-serif"><a href="/2023/05/18/Jetson%20NX/">关于Jetson的系统烧录与环境配置</a></h2><time class="has-text-grey" datetime="2023-05-18T08:07:49.654Z">2023-05-18</time><p class="is-flex-grow-2 mt-2">
 一、准备
 
 Ubuntu电脑 or 虚拟机（Ubuntu系统）
@@ -54,7 +66,7 @@ Ubuntu电脑 or 虚拟机（Ubuntu系统）
 2.2 在PC端Ubuntu系统进行烧录环境准备
 2.2.1 将上述文件拷贝至烧录主机同一目录下
 2.2.2 解压 Linux Driver Package
-$ tar -vxf J..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2023/05/18/Jetson%20NX/">更多</a></section></article></section><aside class="column is-hidden-mobile is-4-tablet is-3-widescreen"><div style="position: sticky; top: 50px;"><main class="aside-card-container categories-widget category-page"><h3>分类</h3><section><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%BD%E6%9D%BF%E5%BC%80%E5%8F%91/">载板开发</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/">问题解决</a><span class="category-list-count">5</span></li></ul></section></main></div></aside></div></article><script>$claudia.fadeInImage(null, $claudia.blurBackdropImg)
+$ tar -vxf J..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2023/05/18/Jetson%20NX/">更多</a></section></article></section><aside class="column is-hidden-mobile is-4-tablet is-3-widescreen"><div style="position: sticky; top: 50px;"><main class="aside-card-container categories-widget category-page"><h3>分类</h3><section><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%BD%E6%9D%BF%E5%BC%80%E5%8F%91/">载板开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/">问题解决</a><span class="category-list-count">5</span></li></ul></section></main></div></aside></div></article><script>$claudia.fadeInImage(null, $claudia.blurBackdropImg)
 
 window.addEventListener('resize', $claudia.throttle(function () {
     var images = document.querySelectorAll('.js-img-fadeIn')
