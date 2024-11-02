@@ -1,0 +1,156 @@
+<!DOCTYPE html><html class="appearance-auto" lang="zh-CN"><head><meta charset="UTF-8"><title>Jetson nano/Raspberry的系统镜像备份</title><meta name="robots" content="noindex"><meta name="description" content="No Pain No Gain"><meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1"><!-- Google Analytics --><!-- End Google Analytics -->
+<!-- Baidu Analytics --><script>var _hmt = _hmt || [];
+(function() {
+var hm = document.createElement("script");
+hm.src = "//hm.baidu.com/hm.js?" + 'a2b0a21b8323843c2fcd318760ad1079';
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();</script><!-- End Baidu Analytics --><link rel="icon" href="/images/favicon.ico"><link rel="stylesheet" href="/style/common/bulma.css"><link rel="stylesheet" href="/style/base.css"><link rel="stylesheet" href="/style/common/helper.css"><script src="/js/common.js"></script><link rel="stylesheet" href="/style/post.css"><link rel="stylesheet" href="/style/themes/highlight-theme-light.css"><link rel="stylesheet" href="/style/common/jquery.fancybox.min.css"><script src="/js/highlight.pack.js"></script><meta name="description" content="
+一、免密码登录
+1.1 Raspberry免密码登录
+
+修改/etc/lightdm/lightdm.conf文件
+sudo nano /etc/lightdm/lightdm.conf
+按下图红框进行修改，其中将haicao替换为你的用户名
+
+
+1.2 Jetson nano免密码登录
+
+修改/etc/lightdm/lightdm.conf文件
+sudo nano /etc/gdm3/custom.conf
+按下图红框进行修改，其中将haicao替换为你的用户名
+
+
+二、取消sudo密码
+2.1 取消Jetson nano的sudo密码
+
+首先进入root模式  sudo su  # 进入root模式，输入exit退出root模式
+sudo visudo  # 编辑该文件
+
+然后按下图红框进行修改，其.."><script src="//unpkg.com/valine/dist/Valine.min.js"></script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="李祖乐的博客" type="application/atom+xml">
+</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">李祖乐's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"><div class="is-full-height" id="postTopic"><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">Jetson nano/Raspberry的系统镜像备份</p><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">点击返回顶部</p></div></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><main class="container is-max-widescreen content section post-page pt-4 px-4"><div class="columns is-flex-desktop is-justify-content-center is-flex-direction-row-reverse"><div class="column is-3 is-hidden-mobile"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95"><span class="toc-text">一、免密码登录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Raspberry%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95"><span class="toc-text">1.1 Raspberry免密码登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Jetson-nano%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95"><span class="toc-text">1.2 Jetson nano免密码登录</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%8F%96%E6%B6%88sudo%E5%AF%86%E7%A0%81"><span class="toc-text">二、取消sudo密码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%8F%96%E6%B6%88Jetson-nano%E7%9A%84sudo%E5%AF%86%E7%A0%81"><span class="toc-text">2.1 取消Jetson nano的sudo密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%8F%96%E6%B6%88Raspberry%E7%9A%84sudo%E5%AF%86%E7%A0%81"><span class="toc-text">2.2 取消Raspberry的sudo密码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%87%AA%E5%90%AF%E5%8A%A8%E8%AE%BE%E7%BD%AE"><span class="toc-text">三、自启动设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1%E4%BD%BF%E7%94%A8SYSTEMD%E8%AE%BE%E7%BD%AE%E8%87%AA%E5%90%AF%E5%8A%A8%E7%A8%8B%E5%BA%8F"><span class="toc-text">3.1使用SYSTEMD设置自启动程序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-1-%E5%AE%9E%E7%8E%B0%E6%AD%A5%E9%AA%A4"><span class="toc-text">3.1.1 实现步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-2-%E5%85%B6%E5%AE%83%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-text">3.1.2 其它相关命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2%E4%BD%BF%E7%94%A8%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8%E7%BB%88%E7%AB%AF%E6%96%B9%E6%B3%95%E5%90%AF%E5%8A%A8%E7%A8%8B%E5%BA%8F"><span class="toc-text">3.2使用开机自启动终端方法启动程序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-%E5%AE%9E%E7%8E%B0%E6%AD%A5%E9%AA%A4"><span class="toc-text">3.2.1 实现步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">3.2.2 注意事项</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%8F%82%E8%80%83%E5%8D%9A%E5%AE%A2"><span class="toc-text">四、参考博客</span></a></li></ol></div><div class="column is-9"><header class="my-4"><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/Raspberry"><i class="tag post-item-tag">Raspberry</i></a><a href="/tags/%E9%95%9C%E5%83%8F%E5%A4%87%E4%BB%BD"><i class="tag post-item-tag">镜像备份</i></a></header><h1 class="mt-0 mb-1 is-family-serif" id="postTitle">Jetson nano/Raspberry的系统镜像备份</h1><time class="has-text-grey" datetime="2024-05-12T19:04:22.354Z">2024-05-13</time><article class="mt-2 post-content"><p><img src="/images/Image_Copy/image_copy_pic.jpg" alt="cover"></p>
+<h2 id="一、免密码登录">一、免密码登录</h2>
+<h3 id="1-1-Raspberry免密码登录">1.1 Raspberry免密码登录</h3>
+<ul>
+<li>修改/etc/lightdm/lightdm.conf文件<br>
+<code>sudo nano /etc/lightdm/lightdm.conf</code></li>
+<li>按下图红框进行修改，其中将haicao替换为你的用户名<br>
+<img src="/images/Self_Start_Jetson/image1.png" /></li>
+</ul>
+<h3 id="1-2-Jetson-nano免密码登录">1.2 Jetson nano免密码登录</h3>
+<ul>
+<li>修改/etc/lightdm/lightdm.conf文件<br>
+<code>sudo nano /etc/gdm3/custom.conf</code></li>
+<li>按下图红框进行修改，其中将haicao替换为你的用户名<br>
+<img src="/images/Self_Start_Jetson/image2.png" /></li>
+</ul>
+<h2 id="二、取消sudo密码">二、取消sudo密码</h2>
+<h3 id="2-1-取消Jetson-nano的sudo密码">2.1 取消Jetson nano的sudo密码</h3>
+<ul>
+<li>首先进入root模式  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">su</span>  <span class="token comment"># 进入root模式，输入exit退出root模式</span>
+<span class="token function">sudo</span> visudo  <span class="token comment"># 编辑该文件</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li>然后按下图红框进行修改，其中将haicao替换为你的用户名<br>
+<img src="/images/Self_Start_Jetson/image3.png" /></li>
+</ul>
+<h3 id="2-2-取消Raspberry的sudo密码">2.2 取消Raspberry的sudo密码</h3>
+<ul>
+<li>取消方法同Jetson nano一样</li>
+</ul>
+<h2 id="三、自启动设置">三、自启动设置</h2>
+<h3 id="3-1使用SYSTEMD设置自启动程序">3.1使用SYSTEMD设置自启动程序</h3>
+<p>此部分实现的功能：开机自启动运行python脚本。经过测试，使用该方法只能运行没有界面的程序。</p>
+<h4 id="3-1-1-实现步骤">3.1.1 实现步骤</h4>
+<ol>
+<li>创建服务文件 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">nano</span> /lib/systemd/system/myservice.service  <span class="token comment"># myservice.service为创建的服务文件名称</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>在文件中编写以下内容
+<ul>
+<li>例一：此为在bash命令行中执行’‘中的命令。值得注意的是，其会在执行’'命令前先执行~/.bashrc中的内容。  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>Unit<span class="token punctuation">]</span>
+<span class="token assign-left variable">Description</span><span class="token operator">=</span>My Lovely Service
+<span class="token assign-left variable">After</span><span class="token operator">=</span>network.target
+
+<span class="token punctuation">[</span>Service<span class="token punctuation">]</span>
+<span class="token assign-left variable">Type</span><span class="token operator">=</span>idle
+<span class="token assign-left variable">Restart</span><span class="token operator">=</span>on-failure
+<span class="token assign-left variable">User</span><span class="token operator">=</span>root
+<span class="token assign-left variable">ExecStart</span><span class="token operator">=</span>/bin/bash <span class="token parameter variable">-c</span> <span class="token string">'cd /home/ubuntu/project/ &amp;&amp; source env/bin/activate &amp;&amp; python app.py'</span>
+
+<span class="token punctuation">[</span>Install<span class="token punctuation">]</span>
+<span class="token assign-left variable">WantedBy</span><span class="token operator">=</span>multi-user.target<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>例二：此为在系统自带的python环境（Python_Path）中执行指定的python程序。值得注意的是，这种方法具有一定的局限性，比如要在执行python程序前还要对某些文件等赋权限，该种方法就不支持了。  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>Unit<span class="token punctuation">]</span>
+<span class="token assign-left variable">Description</span><span class="token operator">=</span>My Lovely Service
+<span class="token assign-left variable">After</span><span class="token operator">=</span>network.target
+
+<span class="token punctuation">[</span>Service<span class="token punctuation">]</span>
+<span class="token assign-left variable">Type</span><span class="token operator">=</span>idle
+<span class="token assign-left variable">Restart</span><span class="token operator">=</span>on-failure
+<span class="token assign-left variable">User</span><span class="token operator">=</span>root
+<span class="token assign-left variable">ExecStart</span><span class="token operator">=</span>/usr/lib/python3.11 /path-to-your-python-file/python_file.py
+
+<span class="token punctuation">[</span>Install<span class="token punctuation">]</span>
+<span class="token assign-left variable">WantedBy</span><span class="token operator">=</span>multi-user.target<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+</li>
+<li>为创建的服务文件进行赋权限 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">chmod</span> <span class="token number">644</span> /lib/systemd/system/myservice.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>配置systemd，需要先运行daemon-reload，然后启用该服务 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl daemon-reload  <span class="token comment"># 运行这个命令来通知systemd重新加载配置，以便更新生效</span>
+<span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> myservice.service<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<h4 id="3-1-2-其它相关命令">3.1.2 其它相关命令</h4>
+<ul>
+<li>取消服务下次运行  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl disable application.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>停止服务当前运行  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl stop application.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>重启服务运行  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl restart application.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>查看服务运行状态  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl status myservice.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>编辑文件内容  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">nano</span> /lib/systemd/system/myservice.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>查看服务输出内容  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">journalctl <span class="token parameter variable">-u</span> myservice <span class="token parameter variable">-e</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ul>
+<h3 id="3-2使用开机自启动终端方法启动程序">3.2使用开机自启动终端方法启动程序</h3>
+<p>此部分实现的功能：开机后在命令行中自动执行相关命令（包括运行python脚本等）。经过测试，使用该方法可以运行带有界面的程序。</p>
+<h4 id="3-2-1-实现步骤">3.2.1 实现步骤</h4>
+<ol>
+<li>首先在终端输入：<code>gnome-session-properties</code></li>
+<li>之后会自动弹出以下界面，点击add<br>
+<img src="/images/Self_Start_Jetson/image4.png" /></li>
+<li>在command中输入：<code>gnome-terminal</code>，其它任意填写。<br>
+<img src="/images/Self_Start_Jetson/image5.png" /></li>
+<li>之后依次点击save和close退出。<br>
+<img src="/images/Self_Start_Jetson/image6.png" /></li>
+<li>然后在命令行中输入：<code>sudo nano ~/.bashrc</code>，在该文件末尾添加你需要执行的全部指令后保存并退出即可。</li>
+</ol>
+<h4 id="3-2-2-注意事项">3.2.2 注意事项</h4>
+<ol>
+<li>该方法的局限性可能在于需要有显示设备；</li>
+<li>关于“~/.bashrc”文件：在每次进入终端terminal后，都会先执行~/.bashrc文件内的相关命令。</li>
+</ol>
+<h2 id="四、参考博客">四、参考博客</h2>
+<ol>
+<li>免密码登录
+<ul>
+<li><a target="_blank" rel="noopener" href='https://blog.csdn.net/bajiaoyan5785/article/details/101083869'>CSDN-bajiaoyan5785</a></li>
+<li><a target="_blank" rel="noopener" href='https://blog.csdn.net/qq_30841655/article/details/120821691'>CSDN-wangxinRS</a></li>
+</ul>
+</li>
+<li>sudo取消密码
+<ul>
+<li><a target="_blank" rel="noopener" href='https://blog.csdn.net/uuhhy/article/details/124331868'>CSDN-吉果果、</a></li>
+</ul>
+</li>
+<li>自启动参考链接
+<ul>
+<li><a target="_blank" rel="noopener" href='https://juejin.cn/post/7114283457437515789'>稀土掘金-吴欣</a></li>
+<li><a target="_blank" rel="noopener" href='https://blog.csdn.net/Lstar_/article/details/120993385'>CSDN-shing_star</a></li>
+</ul>
+</li>
+</ol>
+<!-- flag of hidden posts --></article><section class="jump-container is-flex is-justify-content-space-between my-6"><!-- em is empty placeholder--><em></em></section><article class="mt-6 comment-container"><script async repo="lzule/lzule.github.io" src="https://utteranc.es/client.js" issue-term="pathname" theme="preferred-color-scheme"></script></article><article class="mt-6 comment-container" id="vcomments"></article></div></div></main></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/lzule"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><a title="rss" target="_blank" rel="noopener nofollow" href="/atom.xml"><i class="iconfont icon-rss"></i></a><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 李祖乐 2024</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script src="/js/jquery-3.6.1.min.js"></script><script src="/js/jquery-fancybox.min.js"></script><script src="/js/img_zoom.js"></script><script src="/js/post.js"></script></body></html>

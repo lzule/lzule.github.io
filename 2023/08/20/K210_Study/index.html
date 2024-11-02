@@ -1,0 +1,332 @@
+<!DOCTYPE html><html class="appearance-auto" lang="zh-CN"><head><meta charset="UTF-8"><title>K210学习及代码记录</title><meta name="robots" content="noindex"><meta name="description" content="No Pain No Gain"><meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1"><!-- Google Analytics --><!-- End Google Analytics -->
+<!-- Baidu Analytics --><script>var _hmt = _hmt || [];
+(function() {
+var hm = document.createElement("script");
+hm.src = "//hm.baidu.com/hm.js?" + 'a2b0a21b8323843c2fcd318760ad1079';
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();</script><!-- End Baidu Analytics --><link rel="icon" href="/images/favicon.ico"><link rel="stylesheet" href="/style/common/bulma.css"><link rel="stylesheet" href="/style/base.css"><link rel="stylesheet" href="/style/common/helper.css"><script src="/js/common.js"></script><link rel="stylesheet" href="/style/post.css"><link rel="stylesheet" href="/style/themes/highlight-theme-light.css"><link rel="stylesheet" href="/style/common/jquery.fancybox.min.css"><script src="/js/highlight.pack.js"></script><meta name="description" content="
+一、背景
+    前段时间打电赛的时候，无意中发现了类似Jetson Nano的高性能人工智能嵌入式开发套件K210，于是买了一块K210用来平时无事学习，用这篇博客记录学习中的遇到的问题以及记录比较有意义的代码
+二、学习记录
+    这部分以模块的形式来进行问题与代码记录，具体详情如下：
+1、有用语句学习
+
+得到一个颜色未(0, 81, 137)的背景图  img &amp;#x3D; image.Image(size&amp;#x3D;(lcd.width(), lcd.height()))
+img.draw_rectangle((0, 0, lcd.width(), lcd.height()), fill&amp;#x3D;True, color&amp;#x3D;(0, 81, 137))
+
+
+2、基础模块的学习
+2.1 按键K.."><script src="//unpkg.com/valine/dist/Valine.min.js"></script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="李祖乐的博客" type="application/atom+xml">
+</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">李祖乐's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"><div class="is-full-height" id="postTopic"><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">K210学习及代码记录</p><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">点击返回顶部</p></div></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><main class="container is-max-widescreen content section post-page pt-4 px-4"><div class="columns is-flex-desktop is-justify-content-center is-flex-direction-row-reverse"><div class="column is-3 is-hidden-mobile"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%83%8C%E6%99%AF"><span class="toc-text">一、背景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95"><span class="toc-text">二、学习记录</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1%E3%80%81%E6%9C%89%E7%94%A8%E8%AF%AD%E5%8F%A5%E5%AD%A6%E4%B9%A0"><span class="toc-text">1、有用语句学习</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%E3%80%81%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0"><span class="toc-text">2、基础模块的学习</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#2-1-%E6%8C%89%E9%94%AEK1%E6%8E%A7%E5%88%B6LED%E7%9A%84%E9%A2%9C%E8%89%B2"><span class="toc-text">2.1 按键K1控制LED的颜色</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-%E4%BD%BF%E7%94%A8%E5%AE%9A%E6%97%B6%E5%99%A8%E4%B8%AD%E6%96%AD%E8%BF%90%E8%A1%8C%E5%87%BD%E6%95%B0"><span class="toc-text">2.2 使用定时器中断运行函数</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-3-%E4%BD%BF%E7%94%A8PWM%E6%8E%A7%E5%88%B6%E5%91%BC%E5%90%B8%E7%81%AF"><span class="toc-text">2.3 使用PWM控制呼吸灯</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-4-%E4%BD%BF%E7%94%A8%E8%A7%A6%E6%91%B8%E5%B1%8F"><span class="toc-text">2.4 使用触摸屏</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-5-%E6%89%93%E5%BC%80%E6%91%84%E5%83%8F%E5%A4%B4%E5%B9%B6%E6%98%BE%E7%A4%BA"><span class="toc-text">2.5 打开摄像头并显示</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3%E3%80%81%E9%AB%98%E7%BA%A7%E6%A8%A1%E5%9D%97%E7%9A%84%E5%AD%A6%E4%B9%A0"><span class="toc-text">3、高级模块的学习</span></a></li></ol></li></ol></div><div class="column is-9"><header class="my-4"><a href="/tags/K210"><i class="tag post-item-tag">K210</i></a></header><h1 class="mt-0 mb-1 is-family-serif" id="postTitle">K210学习及代码记录</h1><time class="has-text-grey" datetime="2023-08-20T13:45:49.173Z">2023-08-20</time><article class="mt-2 post-content"><p><img src="/images/K210/K210_pic.png" alt="cover"></p>
+<h4 id="一、背景">一、背景</h4>
+<p>    前段时间打电赛的时候，无意中发现了类似Jetson Nano的高性能人工智能嵌入式开发套件K210，于是买了一块K210用来平时无事学习，用这篇博客记录学习中的遇到的问题以及记录比较有意义的代码</p>
+<h4 id="二、学习记录">二、学习记录</h4>
+<p>    这部分以模块的形式来进行问题与代码记录，具体详情如下：</p>
+<h5 id="1、有用语句学习">1、有用语句学习</h5>
+<ul>
+<li>得到一个颜色未(0, 81, 137)的背景图  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">img &#x3D; image.Image(size&#x3D;(lcd.width(), lcd.height()))
+img.draw_rectangle((0, 0, lcd.width(), lcd.height()), fill&#x3D;True, color&#x3D;(0, 81, 137))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h5 id="2、基础模块的学习">2、基础模块的学习</h5>
+<h6 id="2-1-按键K1控制LED的颜色">2.1 按键K1控制LED的颜色</h6>
+<ul>
+<li>
+<p>具体功能：<br>
+使用K1按键改变LED灯的颜色，并通过led屏幕显示出当前的发光模式</p>
+</li>
+<li>
+<p>相关函数：<br>
+主要使用了ybrgb库中的设置LED显示函数set(x, x, x)以及ybkey库中的判断按键是否按下函数is_press()</p>
+<ul>
+<li>set(red_set, green_set, blue_set)
+<ul>
+<li>red_set表示红色的控制亮灭，其中1表示亮，0表示灭。green_set和blue_set同理</li>
+</ul>
+</li>
+<li>is_press()
+<ul>
+<li>返回值为1表示检测到K1按键按下，返回值0表示未检测到K1按键按下</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>具体代码：</p>
+  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># Untitled - By: HP - 周日 8月 20 2023
+
+import time, lcd, image
+from modules import ybkey, ybrgb
+
+lcd.init()
+lcd.clear(lcd.WHITE)
+RGB &#x3D; ybrgb()
+Key &#x3D; ybkey()
+mode &#x3D; 0
+while True:
+    if Key.is_press():
+        time.sleep_ms(20)
+        while Key.is_press():
+            pass
+        mode +&#x3D; 1
+        mode %&#x3D; 8 
+    if mode &#x3D;&#x3D; 0:
+        RGB.set(0, 0, 0)
+    elif mode &#x3D;&#x3D; 1:
+        RGB.set(0, 0, 1)
+    elif mode &#x3D;&#x3D; 2:
+        RGB.set(0, 1, 0)
+    elif mode &#x3D;&#x3D; 3:
+        RGB.set(0, 1, 1)
+    elif mode &#x3D;&#x3D; 4:
+        RGB.set(1, 0, 0)
+    elif mode &#x3D;&#x3D; 5:
+        RGB.set(1, 0, 1)
+    elif mode &#x3D;&#x3D; 6:
+        RGB.set(1, 1, 0)
+    elif mode &#x3D;&#x3D; 7:
+        RGB.set(1, 1, 1)
+    
+    lcd.draw_string(140, 120, &quot;Mode:&quot; + str(mode), lcd.BLACK, lcd.WHITE)    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h6 id="2-2-使用定时器中断运行函数">2.2 使用定时器中断运行函数</h6>
+<ul>
+<li>
+<p>具体功能：<br>
+使用定时器中断来处理事件on_timer函数</p>
+</li>
+<li>
+<p>相关函数：<br>
+主要使用到了Timer库中的Timer定时器配置函数</p>
+<ul>
+<li>Timer(id, channel, mode=Timer.MODE_ONE_SHOT, period=1000, unit=Timer.UNIT_MS, callback=None, arg=None, start=True, priority=1, div=0)
+<ul>
+<li>id : Timer ID, [0~2] (Timer.TIMER0~TIMER2)</li>
+<li>channel : Timer 通道, [Timer.CHANNEL0~Timer.CHANNEL3]</li>
+<li>mode : Timer 模式, MODE_ONE_SHOT 或者 MODE_PERIODIC 或者 MODE_PWM</li>
+<li>period : Timer 周期, 在启动定时器后 period 时间， 回调函数将会被调用，(0,~)</li>
+<li>unit : 设置周期的单位，默认位毫秒（ ms ），Timer.UNIT_S 或者 Timer.UNIT_MS 或者 Timer.UNIT_US 或者 Timer.UNIT_NS</li>
+<li>callback : 定时器回调函数， 定义了两个参数， 一个是定时器对象 Timer ， 第二个是在定义对象时希望传的参数 arg ，更多请看 arg 参数解释</li>
+<li>arg : 希望传给回调函数的参数，作为回调函数的第二个参数</li>
+<li>start : 是否在对象构建成功后立即开始定时器， True ：立即开始； False :不立即开启，需要调用 start() 函数来启动定时器</li>
+<li>priority : 硬件定时器中断优先级， 与特定的CPU相关， 在K210中，取值范围是[1,7]， 值越小优先级越高</li>
+<li>div : 硬件定时器分频器，取值范围[0,255]， 默认为0， clk_timer（定时器时钟频率） = clk_pll0（锁相环0频率）/2^(div+1)</li>
+</ul>
+</li>
+<li>on_timer(timer)
+<ul>
+<li>该函数可以理解为定时器中断函数，即每隔一确定时间该函数就会执行一次</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>具体代码：</p>
+  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># Untitled - By: HP - 周日 8月 20 2023
+
+
+from machine import Timer
+import time
+
+def on_timer(timer):
+    print(&quot;This is on_timer callback&quot;)
+
+
+timer &#x3D; Timer(Timer.TIMER0, Timer.CHANNEL0,
+            mode&#x3D;Timer.MODE_PERIODIC, period&#x3D;100,
+            unit&#x3D;Timer.UNIT_MS, callback&#x3D;on_timer, arg&#x3D;None)
+
+while True:
+    pass<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h6 id="2-3-使用PWM控制呼吸灯">2.3 使用PWM控制呼吸灯</h6>
+<ul>
+<li>
+<p>具体功能：<br>
+使用定时器的PWM模式来实现呼吸灯的效果</p>
+</li>
+<li>
+<p>相关函数：<br>
+主要使用到了machine库中的Timer定时器配置函数和PWM的配置函数</p>
+<ul>
+<li>Timer(Timer.TIMER0, Timer.CHANNEL0, mode=Timer.MODE_PWM)
+<ul>
+<li>Timer.MODE_PWM：这里主要使用了定时器0的通道0作为PWM输出模型</li>
+<li>其余的参数不需要配置</li>
+</ul>
+</li>
+<li>PWM(tim, freq, duty, pin, enable=True)
+<ul>
+<li>tim : 每个PWM依赖一个定时器来产生波形， 所以这里需要传一个定时器对象，这个定时器对象必须初始化时必须指定定时器 ID 和通道号</li>
+<li>freq ： PWM 波形频率</li>
+<li>duty ： PWM 占空比， 指高电平占整个周期的百分比，取值：[0,100]</li>
+<li>pin ： PWM 输出引脚。 实际物理引脚IO编号。</li>
+<li>enable ： 是否立即开始产生波形，默认位 True ，及对象生成后立即开始在指定的引脚上产生PWM 波形</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>具体代码：</p>
+  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># Untitled - By: HP - 周一 8月 21 2023
+
+from machine import Timer, PWM
+from modules import ybrgb, ybkey
+import time
+
+# RED&#x3D;27, GREEN&#x3D;26, BLUE&#x3D;29
+# LED_PIN &#x3D; 26
+RGB &#x3D; ybrgb()
+RGB.set(0, 0, 0)
+mode &#x3D; 0
+tim1 &#x3D; Timer(Timer.TIMER0, Timer.CHANNEL0, mode&#x3D;Timer.MODE_PWM)
+tim2 &#x3D; Timer(Timer.TIMER0, Timer.CHANNEL1, mode&#x3D;Timer.MODE_PWM)
+tim3 &#x3D; Timer(Timer.TIMER0, Timer.CHANNEL2, mode&#x3D;Timer.MODE_PWM)
+pwm1 &#x3D; PWM(tim1, freq&#x3D;500000, duty&#x3D;0, pin&#x3D;27)
+pwm2 &#x3D; PWM(tim2, freq&#x3D;500000, duty&#x3D;0, pin&#x3D;26)
+pwm3 &#x3D; PWM(tim3, freq&#x3D;500000, duty&#x3D;0, pin&#x3D;29)
+duty_Red &#x3D; 0
+duty_Green &#x3D; 0
+duty_Blue &#x3D; 0
+while True:
+    pwm1.duty(duty_Red)
+    pwm2.duty(duty_Green)
+    pwm3.duty(duty_Blue)
+    duty_Red +&#x3D; 5
+    duty_Red %&#x3D; 100
+    duty_Green +&#x3D; 5
+    duty_Green %&#x3D; 100
+    duty_Blue +&#x3D; 5
+    duty_Blue %&#x3D; 100
+    time.sleep(0.08)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p>注意事项：<br>
+K210的LED灯内部有三个小灯，颜色分别为红、绿、蓝，在每次使用LED时，首先使用RGB.set(0, 0, 0)对其进行初始化，然后再进行PWM控制一个灯的亮度。因为如果我前一次测试的时绿灯引脚的PWM，这一次我要测试红灯引脚的PWN，如果不对灯进行set(0, 0, 0)的话，那么上一次绿灯仍是亮的，发光颜色就会收到干扰。</p>
+</li>
+</ul>
+<h6 id="2-4-使用触摸屏">2.4 使用触摸屏</h6>
+<ul>
+<li>
+<p>具体功能：<br>
+可以使用手指触摸屏幕来实现绘制图画。</p>
+</li>
+<li>
+<p>相关函数：<br>
+主要使用到了touchscreen库中的read获取触摸屏状态及坐标函数</p>
+<ul>
+<li>(status, x, y) = ts.read()
+<ul>
+<li>status：指当前触摸屏的状态，取值有三种：STATUS_RELEASE（等于1）表示当前未触摸屏幕；STATUS_PRESS（等于2）表示当前只是点击了一下屏幕；STATUS_MOVE（等于3）表示当前持续滑动着屏幕</li>
+<li>x， y：表示当前触摸点所在屏幕上的坐标</li>
+</ul>
+</li>
+<li>ts.STATUS_IDLE：该值为0</li>
+</ul>
+</li>
+<li>
+<p>具体代码：</p>
+  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># Untitled - By: HP - 周一 8月 21 2023
+
+import touchscreen as ts
+import lcd, image
+import time
+
+lcd.init()
+ts.init()
+
+img &#x3D; image.Image()  # 默认读取的是一张黑色图片
+#print(img)
+img.draw_string(40, 0, &quot;Please touch the screen&quot;, color&#x3D;(0, 0, 255), scale&#x3D;2)
+
+status_last &#x3D; ts.STATUS_IDLE
+print(status_last)
+x_last &#x3D; 0
+y_last &#x3D; 0
+
+while True:
+    (status, x, y) &#x3D; ts.read()  # 获取触摸屏的状态
+    if status_last !&#x3D; status:
+        print(status, x, y)     # 如果状态发生了变化，则输出
+        status_last &#x3D; status
+
+    if status &#x3D;&#x3D; ts.STATUS_MOVE:  # 如果是连续滑动模式，则绘制直线
+        print(str(status) + &quot;:line&quot;)
+        img.draw_line(x_last, y_last, x, y)
+    elif status &#x3D;&#x3D; ts.STATUS_PRESS:  # 如果是点击模式，则绘制一点
+        print(str(status) + &quot;:point&quot;)
+        img.draw_line(x, y, x, y)
+    lcd.display(img)
+    x_last &#x3D; x
+    y_last &#x3D; y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h6 id="2-5-打开摄像头并显示">2.5 打开摄像头并显示</h6>
+<ul>
+<li>
+<p>具体功能：<br>
+打开K210摄像头并将画面显示到lcd显示屏上，在左上角显示出当前的帧数</p>
+</li>
+<li>
+<p>相关函数：<br>
+主要使用到了sensor库中的摄像头配置与画面获取等函数和lcd库中的显示屏初始化以及显示函数</p>
+<ul>
+<li>sensor.set_pixformat(format)
+<ul>
+<li>用于设置摄像头的输出格式，参数format表示帧格式，可选帧格式有sensor.RGB565、sensor.GRAYSCALE、sensor.YUV422</li>
+</ul>
+</li>
+<li>sensor.set_framesize(framesize)
+<ul>
+<li>用于设置摄像头输出帧大小，K210最大支持VGA格式，大于VGA将无法获取图像，framesize表示帧大小，可选参数有sensor.VGA(640<em>480)、sensor.QVGA(320</em>240)、sensor.QQVGA(160<em>120)。由于屏幕分辨率大小为320</em>240，故QVGA最为合适</li>
+</ul>
+</li>
+<li>sensor.run(enable)
+<ul>
+<li>用于图像捕捉功能控制，参数enable：1表示开始抓取图像，0表示停止抓取图像</li>
+</ul>
+</li>
+<li>sensor.skip_frames(n, [, time])
+<ul>
+<li>表示跳过指定帧或者跳过指定时间内的图像，让相机图像在改变相机设置后稳定下来。参数n：表示跳过n帧图像；参数time：表示跳过指定时间，单位为ms，若n与time皆未指定，该方法跳过300ms的帧；若二者皆指定，该方法会跳过n数量的帧，但将在time ms后返回</li>
+</ul>
+</li>
+<li>clock = time.clock() … clock.tick() … clock.fps()
+<ul>
+<li>上述三个操作用来计算当前的帧率fps</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>具体代码：</p>
+  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># Untitled - By: HP - 周一 8月 21 2023
+
+import sensor, lcd
+import time
+
+lcd.init()
+sensor.reset()
+
+sensor.set_pixformat(sensor.RGB565)
+sensor.set_framesize(sensor.QVGA)
+sensor.run(1)
+sensor.skip_frames(10)
+
+clock &#x3D; time.clock()
+
+while(True):
+    clock.tick()
+    img &#x3D; sensor.snapshot()
+    fps &#x3D; clock.fps()
+    img.draw_string(0, 0, &quot;%2dfps&quot; %(fps), color&#x3D;(0, 0, 255), scale&#x3D;2.0)
+    lcd.display(img)
+    print(fps)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h5 id="3、高级模块的学习">3、高级模块的学习</h5>
+<!-- flag of hidden posts --></article><section class="jump-container is-flex is-justify-content-space-between my-6"><!-- em is empty placeholder--><em></em></section><article class="mt-6 comment-container"><script async repo="lzule/lzule.github.io" src="https://utteranc.es/client.js" issue-term="pathname" theme="preferred-color-scheme"></script></article><article class="mt-6 comment-container" id="vcomments"></article></div></div></main></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/lzule"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><a title="rss" target="_blank" rel="noopener nofollow" href="/atom.xml"><i class="iconfont icon-rss"></i></a><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 李祖乐 2024</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script src="/js/jquery-3.6.1.min.js"></script><script src="/js/jquery-fancybox.min.js"></script><script src="/js/img_zoom.js"></script><script src="/js/post.js"></script></body></html>

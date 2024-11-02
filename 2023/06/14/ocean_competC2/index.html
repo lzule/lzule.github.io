@@ -1,0 +1,622 @@
+<!DOCTYPE html><html class="appearance-auto" lang="zh-CN"><head><meta charset="UTF-8"><title>关于在Jetson部署Yolov5实现检测与串口通信传送位置信息</title><meta name="description" content="No Pain No Gain"><meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1"><!-- Google Analytics --><!-- End Google Analytics -->
+<!-- Baidu Analytics --><script>var _hmt = _hmt || [];
+(function() {
+var hm = document.createElement("script");
+hm.src = "//hm.baidu.com/hm.js?" + 'a2b0a21b8323843c2fcd318760ad1079';
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();</script><!-- End Baidu Analytics --><link rel="icon" href="/images/favicon.ico"><link rel="stylesheet" href="/style/common/bulma.css"><link rel="stylesheet" href="/style/base.css"><link rel="stylesheet" href="/style/common/helper.css"><script src="/js/common.js"></script><link rel="stylesheet" href="/style/post.css"><link rel="stylesheet" href="/style/themes/highlight-theme-light.css"><link rel="stylesheet" href="/style/common/jquery.fancybox.min.css"><script src="/js/highlight.pack.js"></script><meta name="description" content="
+问题背景
+这篇博客用来记录参加海赛C2过程中，如何实现在Jetson Nano上部署目标检测算法以及使用串口通信的方法。
+数据标注与模型训练
+YoloV5的使用与简单讲解
+Yolov5模型目前在网络上已经经过了许多考验，且其Github官方也仍在不断更新，其相关平台的部署在官网也有很多教程，所以如果想在嵌入式平台部署目标检测以及分类网络，选择Yolov5可以带给我们极大的便利，这也是我选择使用Yolov5的原因。以下内容都是基于Yolov5目标检测模型的部署。
+数据集的标注（使用Labelimg进行数据标注）
+
+
+安装labelimg
+这里是在Anaconda环境下的安装
+conda create -n label python&amp;#x3D;&amp;#x3D;3.9 # 注意这里必须是python3.9版本，否则.."><script src="//unpkg.com/valine/dist/Valine.min.js"></script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="李祖乐的博客" type="application/atom+xml">
+</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">李祖乐's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"><div class="is-full-height" id="postTopic"><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">关于在Jetson部署Yolov5实现检测与串口通信传送位置信息</p><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">点击返回顶部</p></div></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><main class="container is-max-widescreen content section post-page pt-4 px-4"><div class="columns is-flex-desktop is-justify-content-center is-flex-direction-row-reverse"><div class="column is-3 is-hidden-mobile"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E8%83%8C%E6%99%AF"><span class="toc-text">问题背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%A0%87%E6%B3%A8%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83"><span class="toc-text">数据标注与模型训练</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#YoloV5%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%8E%E7%AE%80%E5%8D%95%E8%AE%B2%E8%A7%A3"><span class="toc-text">YoloV5的使用与简单讲解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E6%A0%87%E6%B3%A8%EF%BC%88%E4%BD%BF%E7%94%A8Labelimg%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E6%A0%87%E6%B3%A8%EF%BC%89"><span class="toc-text">数据集的标注（使用Labelimg进行数据标注）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9B%E8%A1%8C%E8%AE%AD%E7%BB%83"><span class="toc-text">进行训练</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85ros%EF%BC%8C%E4%BB%A5%E8%BF%9B%E8%A1%8C%E4%B8%B2%E5%8F%A3%E9%80%9A%E4%BF%A1"><span class="toc-text">安装ros，以进行串口通信</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A6%96%E5%85%88%E8%BF%9B%E8%A1%8C%E6%8D%A2%E6%BA%90"><span class="toc-text">首先进行换源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%AF%86%E9%92%A5"><span class="toc-text">获取密钥</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85ROS"><span class="toc-text">安装ROS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E5%8D%B8%E8%BD%BDROS"><span class="toc-text">删除卸载ROS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98%E6%8A%A5%E9%94%99"><span class="toc-text">可能遇到的问题报错</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E5%9C%A8Jetson-nano%E4%B8%8A"><span class="toc-text">将模型部署在Jetson nano上</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9D%83%E9%87%8D%E7%9A%84%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="toc-text">模型权重的文件类型转换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E6%A1%86%E6%9E%B6%E2%80%94%E2%80%94DeepStream"><span class="toc-text">选择框架——DeepStream</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E5%8F%8A%E4%BD%BF%E7%94%A8"><span class="toc-text">运行及使用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%A8%8B%E5%BA%8F%E8%87%AA%E5%90%AF%E5%8A%A8"><span class="toc-text">如何实现程序自启动</span></a></li></ol></div><div class="column is-9"><header class="my-4"><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><i class="tag post-item-tag">深度学习</i></a><a href="/tags/TensorRT"><i class="tag post-item-tag">TensorRT</i></a><a href="/tags/DeepStream"><i class="tag post-item-tag">DeepStream</i></a><a href="/tags/ROS"><i class="tag post-item-tag">ROS</i></a><a href="/tags/Yolov5"><i class="tag post-item-tag">Yolov5</i></a></header><h1 class="mt-0 mb-1 is-family-serif" id="postTitle">关于在Jetson部署Yolov5实现检测与串口通信传送位置信息</h1><time class="has-text-grey" datetime="2023-06-14T03:27:11.440Z">2023-06-14</time><article class="mt-2 post-content"><p><img src="/images/OceanC2/serial_pic.png" alt="cover"></p>
+<h3 id="问题背景">问题背景</h3>
+<p>这篇博客用来记录参加海赛C2过程中，如何实现在Jetson Nano上部署目标检测算法以及使用串口通信的方法。</p>
+<h3 id="数据标注与模型训练">数据标注与模型训练</h3>
+<h4 id="YoloV5的使用与简单讲解">YoloV5的使用与简单讲解</h4>
+<p>Yolov5模型目前在网络上已经经过了许多考验，且其Github官方也仍在不断更新，其相关平台的部署在官网也有很多教程，所以如果想在嵌入式平台部署目标检测以及分类网络，选择Yolov5可以带给我们极大的便利，这也是我选择使用Yolov5的原因。以下内容都是基于Yolov5目标检测模型的部署。</p>
+<h4 id="数据集的标注（使用Labelimg进行数据标注）">数据集的标注（使用Labelimg进行数据标注）</h4>
+<ol>
+<li>
+<p>安装labelimg<br>
+这里是在Anaconda环境下的安装</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">conda create -n label python&#x3D;&#x3D;3.9 # 注意这里必须是python3.9版本，否则安装会导致无法正常使用
+conda activate label # 激活环境
+pip install labelimg # 使用pip安装labelimg
+labelimg # 这是打开labelimg界面的指令<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>
+<p>打开labelimg并配置信息<br>
+输入命令：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">labelimg<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>之后会进入如下界面<br>
+<img src="/images/OceanC2/1.png" style="zoom: 100%;" /></p>
+<ul>
+<li>这里主要需要配置上图中三个红圈选项<br>
+先简单介绍一下：
+<ul>
+<li>Open Dir：这里是打开你存放图片的文件夹</li>
+<li>Change Save Dir：这里是你图片标注的标签数据存放位置</li>
+<li>Yolo：这个是选择标注数据的格式，其中有很多个选项，根据自己模型训练所需的标签类型进行选择，这里选择yolo因为我训练的数据标签要求是Yolo类型。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>进行数据标注<br>
+当把上述配置准备工作完成后，就可以开始数据标注了啦，如下视频所示：<br>
+<video id="video" controls="" preload="none" poster="封面"><br>
+<source id="mp4" src="/videos/labelimg_video1.mp4" type="video/mp4"><br>
+</videos><br>
+如上视频所示，对数据进行标注。这里介绍最常使用的快捷键，可以帮助更快地进行数据标注工作：</p>
+<ul>
+<li>W键：显示十字光标，出现十字光标后即可配合鼠标框住目标</li>
+<li>D键：下一张图片</li>
+<li>A键：上一张图片</li>
+<li>Ctrl+S键：对当前操作进行保存</li>
+<li>Ctrl+鼠标滚轮：对图片上鼠标所指区域进行放大和缩小操作<br>
+一般来说，知道上述四种快捷键即可帮助你进行快捷标注数据啦</li>
+</ul>
+</li>
+</ol>
+<h4 id="进行训练">进行训练</h4>
+<p>在标注完数据后，剩下的就是核心环节：训练模型</p>
+<ol>
+<li>
+<p>下载官方源码<br>
+首先从Yolov5官方Github上clone其代码：<a target="_blank" rel="noopener" href="https://github.com/ultralytics/yolov5">https://github.com/ultralytics/yolov5</a><br>
+可以使用两种方式下载其代码：</p>
+<ul>
+<li>
+<p>方法一：使用git clone命令下载：<br>
+<img src="/images/OceanC2/2.png" style="zoom: 100%;" /><br>
+如上图所示，copy当前github下载链接，然后在你的虚拟环境下输入命令：</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">git clone git@github.com:ultralytics&#x2F;yolov5.git  # 这条指令会在你的当前路径下载Yolov5文件<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>如果失败了，显示没有找到git命令，那么就是当前你的虚拟环境没有安装git，使用conda install git 或者 pip install git命令进行安装<br>
+如果失败了，显示是网络问题，那么可能你需要挂梯子才可以。如果仍然无法解决，那么就尝试开关重启。</p>
+</li>
+<li>
+<p>方法二：直接从官网下载zip文件：<br>
+<img src="/images/OceanC2/3.png" style="zoom: 100%;" /><br>
+如上图所示，点击红圈选项，下载zip文件，随后将其解压即可得到Yolov5官方文件</p>
+</li>
+</ul>
+</li>
+<li>
+<p>配置模型训练相关信息<br>
+然后进入文件目录，在data文件夹下创建一个C2.yaml文件，其内容如下：</p>
+ <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># YOLOv5 🚀 by Ultralytics, AGPL-3.0 license
+# COCO128 dataset https:&#x2F;&#x2F;www.kaggle.com&#x2F;ultralytics&#x2F;coco128 (first 128 images from COCO train2017) by Ultralytics
+# Example usage: python train.py --data coco128.yaml
+# parent
+# ├── yolov5
+# └── datasets
+#     └── coco128  ← downloads here (7 MB)
+
+
+# Train&#x2F;val&#x2F;test sets as 1) dir: path&#x2F;to&#x2F;imgs, 2) file: path&#x2F;to&#x2F;imgs.txt, or 3) list: [path&#x2F;to&#x2F;imgs1, path&#x2F;to&#x2F;imgs2, ..]
+path: ..&#x2F;datasets&#x2F;coco128  # dataset root dir
+train: images&#x2F;train2017  # train images (relative to &#39;path&#39;) 128 images
+val: images&#x2F;train2017  # val images (relative to &#39;path&#39;) 128 images
+test:  # test images (optional)
+
+# Classes
+names:
+  0: hole<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>文件路径以及内容详细参考以下图片：<br>
+<img src="/images/OceanC2/5.png" style="zoom: 100%;" /><br>
+其中：</p>
+<ul>
+<li>path：是指根目录的路径</li>
+<li>train：是指要训练的图片存放位置</li>
+<li>val：是指要验证的图片存放位置（这里和train保持一致即可）</li>
+<li>name：类别存放位置，如图中所示：0表示目标类别索引（从0开始），hole表示其代表的类别名称</li>
+</ul>
+<p>这里再附上一张训练数据存放的文件夹路径及内容：<br>
+<img src="/images/OceanC2/6.png" style="zoom:100%;" /><br>
+这里只需要关注白色圈中的两个文件夹dataset与yolov5，其中路径相对位置如下：</p>
+ <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># parent
+# ├── yolov5
+# └── datasets
+#     └── coco128
+#         └── images
+#             └── train2017 # 文件夹下是训练图片
+#         └── labels
+#             └── train2017 # 文件夹下是训练图片对应的标注文件<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<p>之后按照官方文档进行配置你的虚拟环境，配置完成后即可使用终端在当前路径下输入以下命令进行训练：</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">python train.py --data C2.yaml --weights yolov5n.pt --cfg yolov5n.yaml --img 640  --batch-size 4<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>指令解释：</p>
+<ul>
+<li>–data：C2.yaml为前面所创建的文件，里面存放的是配置训练数据的相关内容</li>
+<li>–weights： yolov5n.pt是指使用官方的yolov5n预训练模型来进行迁移学习训练</li>
+<li>–cfg：yolov5n.yaml文件时模型的结构文件</li>
+<li>–img：640是指送进模型进行训练的图片尺寸，640表示640x640。注意此数字应为32的整数倍，不然训练会出错</li>
+<li>–batch-size：4是指一次送入模型训练的图片个数为4，这一项和你的GPU性能相联系，batch-size过大会导致你的GPU因为显存不够而无法训练。</li>
+</ul>
+<p>如果上述命令输入后显示错误，一般来说是你的batch-size设置过大了，调小即可，如2或1。<br>
+当然还有一个前提是，你按照官方文档成功配置好了你的虚拟环境，如pytorch、cuda等。</p>
+<p>训练完成后，你的模型存放在如下路径：</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># parent
+# ├── yolov5
+#     └── runs
+#         └── train
+#             └── exp # 不一定是exp，也有可能是exp+一个数字
+#                 └── weights
+#                     └── best.pt # 这是训练得到的最优的权重<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="安装ros，以进行串口通信">安装ros，以进行串口通信</h3>
+<p>这里先附上jetson nano的引脚图<br>
+<img src="/images/OceanC2/7.png" style="zoom:100%;" /></p>
+<h4 id="首先进行换源">首先进行换源</h4>
+<ol>
+<li>备份源，防止操作错误以复用<br>
+<code>cp /etc/apt/sources.list   /etc/apt/sources.list.bak</code></li>
+<li>编辑源文件，添加镜像<br>
+<code>sudo gedit /etc/apt/sources.list</code></li>
+<li>在打开的源文件中，将原内容删除，然后添加以下内容：</li>
+</ol>
+<ul>
+<li>清华源：<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+deb https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu-ports&#x2F; bionic main restricted universe multiverse
+# deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu-ports&#x2F; bionic main restricted universe multiverse
+deb https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-updates main restricted universe multiverse
+# deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-updates main restricted universe multiverse
+deb https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-backports main restricted universe multiverse
+# deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-backports main restricted universe multiverse
+deb https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-security main restricted universe multiverse
+# deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-security main restricted universe multiverse
+deb https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-proposed main restricted universe multiverse
+deb-src https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-proposed main restricted universe multiverse<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>中科大源：<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic main restricted universe multiverse
+# deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic main restricted universe multiverse
+deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-updates main restricted universe multiverse
+# deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-updates main restricted universe multiverse
+deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-backports main restricted universe multiverse
+# deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-backports main restricted universe multiverse
+deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-security main restricted universe multiverse
+# deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-security main restricted universe multiverse
+deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-proposed main restricted universe multiverse
+deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-proposed main restricted universe multiverse<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>阿里源：<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+deb https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu-ports&#x2F; bionic main restricted universe multiverse
+# deb-src https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu-ports&#x2F; bionic main restricted universe multiverse
+deb https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu-ports&#x2F; bionic-updates main restricted universe multiverse
+# deb-src https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu-ports&#x2F; bionic-updates main restricted universe multiverse
+deb https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu-ports&#x2F; bionic-backports main restricted universe multiverse
+# deb-src https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu-ports&#x2F;s bionic-backports main restricted universe multiverse
+deb https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu-ports&#x2F; bionic-security main restricted universe multiverse
+# deb-src https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu-ports&#x2F; bionic-security main restricted universe multiverse
+deb https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu-ports&#x2F; bionic-proposed main restricted universe multiverse
+deb-src https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu-ports&#x2F; bionic-proposed main restricted universe multiverse<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<ol start="4">
+<li>添加完成后，保存并退出。使用下述两条命令更新： <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> update
+<span class="token function">sudo</span> <span class="token function">apt</span> upgrade <span class="token parameter variable">-y</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li>更换ROS的国内源（两条指令差不多，第一个是国外，第二个是中科大的源，选择一个即可） <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">sh</span> <span class="token parameter variable">-c</span> <span class="token string">'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+ <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">sh</span> <span class="token parameter variable">-c</span> <span class="token string">'. /etc/lsb-release &amp;&amp; echo "deb http://mirrors.ustc.edu.cn/ros/ubuntu/ `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list'</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>然后再使用如下命令更新，完成后即配置成功 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ol>
+<h4 id="获取密钥">获取密钥</h4>
+<p>有两种方法，推荐方法一</p>
+<ul>
+<li>方法一：官网操作<br>
+可以获取最新的密钥，不用担心密钥是否过期，但可能受网络影响  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">curl</span>        <span class="token comment"># 如果你没有安装curl的话，就使用这条命令</span>
+<span class="token function">curl</span> <span class="token parameter variable">-s</span> https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc <span class="token operator">|</span> <span class="token function">sudo</span> apt-key <span class="token function">add</span> -<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li>方法二：网络教程<br>
+密钥可能过期，可以到网上搜索其他人发的密钥，试一试<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> apt-key adv <span class="token parameter variable">--keyserver</span> keyserver.ubuntu.com --recv-keys 8D5A09DC9B929006<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ul>
+<p>然后再使用如下命令对源软件列表进行更新（原先可能没密钥导致更新失败）</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="安装ROS">安装ROS</h4>
+<ol>
+<li>安装全功能的ROS，这个安装包大概超过200M，执行以下命令：<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> ros-melodic-desktop-full<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>设置环境变量 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"source /opt/ros/melodic/setup.bash"</span> <span class="token operator">>></span> ~/.bashrc
+<span class="token builtin class-name">source</span> ~/.bashrc<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li>安装相关的依赖 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential  <span class="token function">vim</span> openconnect openssh-server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>ROS初始化<br>
+使用如下命令： <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> rosdep
+rosdep update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li>ROS运行测试<br>
+在终端分别执行以下语句，测试小乌龟（具体作用我也不懂），只要能成功运行，那么表明你的ROS安装成功。 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">roscore
+rosrun turtlesim turtlesim_node
+rosrun turtlesim turtle_teleop_key<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<p>如果出现 Command rosrun not found 即 rosrun 命令找不到的情况，输入以下命令即可：<br>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> rosbash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></p>
+<h4 id="删除卸载ROS">删除卸载ROS</h4>
+<p>当发现自己安装失败无法解决时，可以尝试重新开始，那么就需要把ROS重新装一遍了。</p>
+<ul>
+<li>输入以下命令进行ROS的删除卸载：  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> purge ros-*
+<span class="token function">sudo</span> <span class="token function">rm</span> <span class="token parameter variable">-rf</span> /etc/ros
+gedit ~/.bashrc   <span class="token comment"># 打开该文件，删除带有melodic那一行即可</span>
+<span class="token builtin class-name">source</span> ~/.bashrc  <span class="token comment"># 刷新环境</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+<h4 id="可能遇到的问题报错">可能遇到的问题报错</h4>
+<ol>
+<li>Could not find a package configuration file provided by “serial“ with any serialConfig.cmake
+<ul>
+<li>输入以下命令 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> ros-melodic-serial<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ul>
+</li>
+<li>无法定位功能包 E: Unable to locate package ros-melodic-***
+<ul>
+<li>方案一：首先使用以下命令更新一下，然后再次安装   <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>方案二：如果仍然无法下载，尝试输入以下命令，然后再次安装 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">sh</span> <span class="token parameter variable">-c</span> <span class="token string">'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'</span>
+<span class="token function">sudo</span> apt-key adv <span class="token parameter variable">--keyserver</span> <span class="token string">'hkp://keyserver.ubuntu.com:80'</span> --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+<span class="token function">sudo</span> <span class="token function">apt</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>方案三：进行换源
+<ul>
+<li>再次打开sources.list文件，使用以下命令：<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gedit /etc/apt/sources.list<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>在文件末尾加入以下内容:<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">deb http://packages.ros.org/ros-shadow-fixed/ubuntu bionic main  <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>然后再次使用以下命令更新完后，再次安装：<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>sudo rosdep init 找不到命令
+<ul>
+<li>首先查看rosdep是否安装，使用以下命令：<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">whereis</span> rosdep<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>若没有显示任何信息，则表示没有安装，然后输入以下命令进行安装rosdep：<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> python-rosdep2 <span class="token parameter variable">-y</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="将模型部署在Jetson-nano上">将模型部署在Jetson nano上</h3>
+<h4 id="模型权重的文件类型转换">模型权重的文件类型转换</h4>
+<ol>
+<li>将模型权重由pt格式转换为wts格式</li>
+</ol>
+<ul>
+<li>在yolov5文件夹中创建一个gen_wts.py文件，内容如下：<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">import sys
+import argparse
+import os
+import struct
+import torch
+from utils.torch_utils import select_device
+
+
+def parse_args():
+    parser &#x3D; argparse.ArgumentParser(description&#x3D;&#39;Convert .pt file to .wts&#39;)
+    parser.add_argument(&#39;-w&#39;, &#39;--weights&#39;, required&#x3D;True,
+                        help&#x3D;&#39;Input weights (.pt) file path (required)&#39;)
+    parser.add_argument(
+        &#39;-o&#39;, &#39;--output&#39;, help&#x3D;&#39;Output (.wts) file path (optional)&#39;)
+    parser.add_argument(
+        &#39;-t&#39;, &#39;--type&#39;, type&#x3D;str, default&#x3D;&#39;detect&#39;, choices&#x3D;[&#39;detect&#39;, &#39;cls&#39;, &#39;seg&#39;],
+        help&#x3D;&#39;determines the model is detection&#x2F;classification&#39;)
+    args &#x3D; parser.parse_args()
+    if not os.path.isfile(args.weights):
+        raise SystemExit(&#39;Invalid input file&#39;)
+    if not args.output:
+        args.output &#x3D; os.path.splitext(args.weights)[0] + &#39;.wts&#39;
+    elif os.path.isdir(args.output):
+        args.output &#x3D; os.path.join(
+            args.output,
+            os.path.splitext(os.path.basename(args.weights))[0] + &#39;.wts&#39;)
+    return args.weights, args.output, args.type
+
+
+pt_file, wts_file, m_type &#x3D; parse_args()
+print(f&#39;Generating .wts for &#123;m_type&#125; model&#39;)
+
+# Load model
+print(f&#39;Loading &#123;pt_file&#125;&#39;)
+device &#x3D; select_device(&#39;cpu&#39;)
+model &#x3D; torch.load(pt_file, map_location&#x3D;device)  # Load FP32 weights
+model &#x3D; model[&#39;ema&#39; if model.get(&#39;ema&#39;) else &#39;model&#39;].float()
+
+if m_type in [&#39;detect&#39;, &#39;seg&#39;]:
+    # update anchor_grid info
+    anchor_grid &#x3D; model.model[-1].anchors * model.model[-1].stride[..., None, None]
+    # model.model[-1].anchor_grid &#x3D; anchor_grid
+    delattr(model.model[-1], &#39;anchor_grid&#39;)  # model.model[-1] is detect layer
+    # The parameters are saved in the OrderDict through the &quot;register_buffer&quot; method, and then saved to the weight.
+    model.model[-1].register_buffer(&quot;anchor_grid&quot;, anchor_grid)
+    model.model[-1].register_buffer(&quot;strides&quot;, model.model[-1].stride)
+
+model.to(device).eval()
+
+print(f&#39;Writing into &#123;wts_file&#125;&#39;)
+with open(wts_file, &#39;w&#39;) as f:
+    f.write(&#39;&#123;&#125;\n&#39;.format(len(model.state_dict().keys())))
+    for k, v in model.state_dict().items():
+        vr &#x3D; v.reshape(-1).cpu().numpy()
+        f.write(&#39;&#123;&#125; &#123;&#125; &#39;.format(k, len(vr)))
+        for vv in vr:
+            f.write(&#39; &#39;)
+            f.write(struct.pack(&#39;&gt;f&#39;, float(vv)).hex())
+        f.write(&#39;\n&#39;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>然后在你的虚拟环境下运行如下命令：<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">python gen_wts.py -w .&#x2F;runs&#x2F;train&#x2F;exp&#x2F;weights&#x2F;best.pt -o .&#x2F;best.wts -t detect<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+命令解释：
+<ul>
+<li>-w：是权重权重存放位置</li>
+<li>-o：是生成的wts类型权重的名称以及存放路径</li>
+<li>-t：是指定你的模型类型，detect表示目标检测网络，cls表示分类网络，seg表示分割网络<br>
+运行完毕后即可发现在当前路径下以及生成了一个best.wts文件</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>将wts格式权重转换为tensorrt的engine格式<br>
+这里需要使用Github上开源的相关工程文件，使用git clone将工程克隆到任意路径下，需要注意的是接下来的操作都是在Jetson系统上进行的。
+<ul>
+<li>下载相关文件，使用命令（方法同上）：  <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">git clone https:&#x2F;&#x2F;github.com&#x2F;wang-xinyu&#x2F;tensorrtx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li>该工程目录如下： <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># ├── tensorrtx
+#     └── yolov5
+#         └── images
+#         └── best.wts # 将上述生成得到的best.wts文件放入此路径
+#         └── plugin # 里面存放的适合yolov5模型结构相关的文件
+#         └── src # 里面是我们需要修改到的模型运行配置文件
+#             └── config.h
+#                 └── weights
+#                     └── best.pt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>修改细节如下：
+<ul>
+<li>config.h：将其中的kNumClass = 80修改为我们模型训练使用的类别数，这里我修改的kNumClass = 2;</li>
+</ul>
+</li>
+<li>然后在yolov5路径下使用如下命令将wts格式权重文件转换为engine格式权重文件 <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">mkdir build
+cd build
+cmake ..
+make
+sudo .&#x2F;yolov5_det -s ..&#x2F;best.wts ..&#x2F;best.engine n<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+命令解释：
+<ul>
+<li>前四行命令：是使用cmake相关指令对相关文件进行编译，以生成可执行文件yolov5_det</li>
+<li>最后一行命令：
+<ul>
+<li>yolov5_det：目标检测的可执行文件，yolov5_cls与yolov5_seg同理；</li>
+<li>-s：应该是一种模型选择（即选择进行模型转换模型），…/best.wts表示我们前面操作生成的wts格式权重文件，即源文件；…/best.engine是目标文件，即生成转换得到的文件</li>
+<li>n：是我们yolov5模型的类型，这里由于我选择使用的是yolov5n模型，故为n。这里拓展一下若是yolov5m模型，则是m；yolov5l模型，则是l；其他类型同理即可。<br>
+注意：如果运行失败，请严格对照是否按照上述操作对相关文件进行修改。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>之后使用如下命令检验生成的engine文件是否有问题： <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">sudo .&#x2F;yolov5_det -d ..&#x2F;best.engine ..&#x2F;samples<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+命令解释：
+<ul>
+<li>-d：解释同上，是一种模型选择，即进行测试</li>
+<li>…/best.engine：我们生成的engine格式文件路径</li>
+<li>…/samples：我们要检测的图片存放路径，这里可自行创建该文件夹，并将自己的图片放入此文件夹</li>
+</ul>
+</li>
+<li>运行完后，会在当前路径下得到检测后的图片，可以自行观察检测模型是否有问题。</li>
+<li>相关路径： <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># ├── tensorrtx
+#     └── yolov5
+#         └── images
+#         └── best.wts # 将上述生成得到的best.wts文件放入此路径
+#         └── best.engine # 生成的engine文件
+#         └── samples
+#             └── test1.jpg
+#             └── test2.jpg
+#             └── ...
+#         └── plugin # 里面存放的适合yolov5模型结构相关的文件
+#         └── src # 里面是我们需要修改到的模型运行配置文件
+#             └── config.h
+#                 └── weights
+#                     └── best.pt
+#         └── build # cmake相关语句后得到的文件
+#             └── yolov5_det
+#             └── libmyplugins.so<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="选择框架——DeepStream">选择框架——DeepStream</h4>
+<ol>
+<li>安装Deepstream5.x
+<ul>
+<li>附上下载地址：<a target="_blank" rel="noopener" href="https://developer.nvidia.com/deepstream-getting-started">https://developer.nvidia.com/deepstream-getting-started</a></li>
+<li>这里需要注意的是必须安装Deepstream5.x版本，最好是5.0，不然以下操作可能无效，</li>
+</ul>
+</li>
+<li>下载相关源文件<br>
+从Github上克隆他人开源的工程文件，使用命令（方法同上）： <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">git clone git@github.com:DanaHan&#x2F;Yolov5-in-Deepstream-5.0.git<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+该工程目录如下（这里只给出要修改的文件）： <pre class="line-numbers language-c++" data-language="c++"><code class="language-c++"># ├── Yolov5-in-Deepstream-5.0
+#     └── Deepstream5.0
+#         └── includes
+#         └── nvdsinfer_custom_impl_Yolo
+#             └── nvdsparsebbox_Yolo.cpp
+#             └── Makefile
+#         └── deepstream_app_config_yoloV5.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>修改细节：
+<ul>
+<li>进入nvdsparsebbox_Yolo.cpp文件，内容如下，细节见注释：<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">...
+#include &lt;cstdio&gt;
+#include &quot;serial&#x2F;serial.h&quot;
+#include &lt;vector&gt;
+...
+
+static bool NvDsInferParseYoloV5(
+    std::vector&lt;NvDsInferLayerInfo&gt; const&amp; outputLayersInfo,
+    NvDsInferNetworkInfo const&amp; networkInfo,
+    NvDsInferParseDetectionParams const&amp; detectionParams,
+    std::vector&lt;NvDsInferParseObjectInfo&gt;&amp; objectList)&#123;
+    
+    serial::Serial my_serial(&quot;&#x2F;dev&#x2F;ttyTHS1&quot;, 9600, serial::Timeout::simpleTimeout(50)); &#x2F;&#x2F; 设置串口
+    &#x2F;*if(my_serial.isOpen())&#123;                                                           &#x2F;&#x2F; 测试串口是否成功打开
+        std::cout &lt;&lt; &quot;the location:    X:&quot; &lt;&lt; std::endl;
+    &#125;*&#x2F;
+    std::vector&lt;Detection&gt; res;
+
+    nms(res, (float*)(outputLayersInfo[0].buffer), CONF_THRESH, NMS_THRESH);
+    &#x2F;&#x2F;std::cout&lt;&lt;&quot;Nms done sucessfully----&quot;&lt;&lt;std::endl;
+    NvDsInferParseObjectInfo globalbbox;                                                &#x2F;&#x2F; 设置目标检测区域
+    globalbbox.classId &#x3D; 0;
+    globalbbox.left    &#x3D; static_cast&lt;unsigned int&gt;(160);
+    globalbbox.top     &#x3D; static_cast&lt;unsigned int&gt;(120);
+    globalbbox.width   &#x3D; static_cast&lt;unsigned int&gt;(320);
+    globalbbox.height  &#x3D; static_cast&lt;unsigned int&gt;(240);
+    globalbbox.detectionConfidence &#x3D; 0.9;
+    objectList.push_back(globalbbox);                                                   &#x2F;&#x2F; 将目标检测区域当作目标，以在视频中得到显示
+    std::string output &#x3D; &quot;A&quot;;                                                           &#x2F;&#x2F; 设置标志位
+    unsigned int x &#x3D; 100;                                                               &#x2F;&#x2F; 设置初始目标的中心
+    unsigned int y &#x3D; 100;
+    unsigned int x_temp &#x3D; 0;                                                            &#x2F;&#x2F; 设置暂存变量
+    unsigned int y_temp &#x3D; 0;
+    double confidence_max &#x3D; 0;                                                          &#x2F;&#x2F; 按照置信度进行优先级选择
+    for(auto&amp; r : res) &#123;
+      NvDsInferParseObjectInfo oinfo;        
+      oinfo.classId &#x3D; r.class_id;
+            if(oinfo.classId !&#x3D; 0) continue;
+      oinfo.left    &#x3D; static_cast&lt;unsigned int&gt;(r.bbox[0]-r.bbox[2]*0.5f);
+      oinfo.top     &#x3D; static_cast&lt;unsigned int&gt;(r.bbox[1]-r.bbox[3]*0.5f);
+      oinfo.width   &#x3D; static_cast&lt;unsigned int&gt;(r.bbox[2]);
+      oinfo.height  &#x3D; static_cast&lt;unsigned int&gt;(r.bbox[3]);
+      oinfo.detectionConfidence &#x3D; r.conf;
+      x_temp &#x3D; static_cast&lt;unsigned int&gt;(oinfo.left + oinfo.width*0.5f);                &#x2F;&#x2F; 计算目标的中心x,y
+      y_temp &#x3D; static_cast&lt;unsigned int&gt;(oinfo.top + oinfo.height*0.5f);
+      if(x_temp&gt;160 &amp;&amp; x_temp&lt;480 &amp;&amp; y_temp&gt;120 &amp;&amp; y_temp&lt; 360 &amp;&amp; r.conf &gt; confidence_max)&#123;  &#x2F;&#x2F; 判断目标中心是否落入检测区域
+          x &#x3D; x_temp;y &#x3D; y_temp; confidence_max &#x3D; r.conf;
+      &#125;
+      objectList.push_back(oinfo);        
+    &#125;
+    output +&#x3D; std::to_string(x);                                                        &#x2F;&#x2F; 将串口要发送的位置信息转换为合适格式
+    output +&#x3D; std::to_string(y);
+    output +&#x3D; &#39;B&#39;;                                                                      &#x2F;&#x2F; 设置停止位
+    std::vector&lt;uint8_t&gt; data(output.begin(), output.end());                            &#x2F;&#x2F; 对数据进行编码，以配合串口发送信息
+    &#x2F;&#x2F; std::cout &lt;&lt; data.size() &lt;&lt; std::endl;
+    my_serial.write(data.data(), data.size());                                          &#x2F;&#x2F; 串口发送坐标信息
+    std::cout &lt;&lt; &quot;the location:    X:&quot; &lt;&lt; x &lt;&lt;&quot;,   Y:&quot; &lt;&lt; y  &lt;&lt; &quot;,   conf:&quot; &lt;&lt; confidence_max &lt;&lt; &quot;,   link:&quot; &lt;&lt; data.data() &lt;&lt; std::endl;  &#x2F;&#x2F; d打印当前串口发送的坐标信息，实际中可以将此行注释掉，因为print操作会影响程序运行速度
+    return true;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>将上述模型格式转换过程中生成的best.engine与libmyplugins.so文件复制到Deepstream5.0路径下</li>
+<li>修改deepstream_app_config_yoloV5.txt文件，修改细节以及具体注释如下：<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">...
+
+[source0]
+enable&#x3D;1
+#Type - 1&#x3D;CameraV4L2 2&#x3D;URI 3&#x3D;MultiURI
+type&#x3D;1   # camera
+camera-width&#x3D;640 # 相机获取视频的宽
+camera-height&#x3D;480# 相机获取视频的高
+camera-fps-n&#x3D;30  # 相机获取视频的帧率分子为30
+camera-fps-d&#x3D;1   # 相机获取视频的帧率分母为1，n与d配合，即30帧
+#camera-v412-dev-node&#x3D;0
+#uri&#x3D;file:&#x2F;opt&#x2F;nvidia&#x2F;deepstream&#x2F;deepstream-5.0&#x2F;samples&#x2F;streams&#x2F;sample_1080p_h264.mp4
+#uri&#x3D;file:&#x2F;home&#x2F;nvidia&#x2F;Documents&#x2F;5-Materials&#x2F;Videos&#x2F;0825.avi
+num-sources&#x3D;1    # 设置输入源数量，这里是1个
+gpu-id&#x3D;0         # 设置使用的GPU ID，这里是0号GPU
+# (0): memtype_device   - Memory type Device
+# (1): memtype_pinned   - Memory type Host Pinned
+# (2): memtype_unified  - Memory type Unified
+cudadec-memtype&#x3D;0  # 设置CUDA解码器使用的内存类型，这里是Device内存
+
+...
+
+# 这里是配置生成视频流
+[streammux] 
+...
+width&#x3D;640
+height&#x3D;480
+...
+
+...
+
+[primary-gie]
+enable&#x3D;1
+gpu-id&#x3D;0
+model-engine-file&#x3D;best.engine # 物体检测模型引擎文件
+labelfile-path&#x3D;labels.txt     # 标签文件路径,包含类名，这里需要自己创建一个labels.txt文件
+#batch-size&#x3D;1
+#Required by the app for OSD, not a plugin property
+bbox-border-color0&#x3D;1;0;0;1  # 边界框边框颜色
+bbox-border-color1&#x3D;0;1;1;1
+bbox-border-color2&#x3D;0;0;1;1
+bbox-border-color3&#x3D;0;1;0;1
+interval&#x3D;0  # 推理间隔,单位毫秒
+gie-unique-id&#x3D;1
+nvbuf-memory-type&#x3D;0
+config-file&#x3D;config_infer_primary_yoloV5.txt  # 包含更多设置的配置文件
+
+[tracker]
+enable&#x3D;0
+tracker-width&#x3D;512
+tracker-height&#x3D;320
+ll-lib-file&#x3D;&#x2F;opt&#x2F;nvidia&#x2F;deepstream&#x2F;deepstream-5.0&#x2F;lib&#x2F;libnvds_mot_klt.so  # 根据自己的libnvds_mot_klt.so存放路径进行更改，一般而言不需要修改此项。如果是Deepstream5.1，可能需要修改为&#x2F;opt&#x2F;nvidia&#x2F;deepstream&#x2F;deepstream-5.1&#x2F;lib&#x2F;libnvds_mot_klt.so
+...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>在Deepstream5.0路径下创建一个labels.txt文件，内容如下：<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">hole<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+解释：一个目标一行，即表示索引和内容</li>
+<li>修改Makefile文件内容，细节以及注释如下：<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">CUDA_VER?&#x3D;10.2
+ifeq ($(CUDA_VER),)
+  $(error &quot;CUDA_VER is not set&quot;)
+endif
+CC:&#x3D; g++
+NVCC:&#x3D;&#x2F;usr&#x2F;local&#x2F;cuda-$(CUDA_VER)&#x2F;bin&#x2F;nvcc
+
+CFLAGS:&#x3D; -Wall -std&#x3D;c++11 -shared -fPIC -Wno-error&#x3D;deprecated-declarations
+CFLAGS+&#x3D; -I..&#x2F;includes -I&#x2F;usr&#x2F;local&#x2F;cuda-$(CUDA_VER)&#x2F;include -I&#x2F;opt&#x2F;ros&#x2F;melodic&#x2F;include # 新增的，以成功在待编译的cpp文件中引入&lt;serial&#x2F;serial.h&gt;头文件
+
+LIBS:&#x3D; -lnvinfer_plugin -lnvinfer -lnvparsers -L&#x2F;usr&#x2F;local&#x2F;cuda-$(CUDA_VER)&#x2F;lib64 -lcudart -lcublas -lstdc++fs -L&#x2F;opt&#x2F;ros&#x2F;melodic&#x2F;lib -lserial  # 新增的，链接库文件&#x2F;opt&#x2F;ros&#x2F;melodic&#x2F;lib&#x2F;libserial.so，以实现串口通信。
+LFLAGS:&#x3D; -shared -Wl,--start-group $(LIBS) -Wl,--end-group
+
+INCS:&#x3D; $(wildcard *.h) 
+SRCFILES:&#x3D; nvdsinfer_yolo_engine.cpp \
+          nvdsparsebbox_Yolo.cpp   \
+          trt_utils.cpp              \
+          #  yolo.cpp              \  # 注释掉这两行，因为使用不到，并且使用的话会导致无法顺利通过编译。
+          #  yoloPlugins.cpp          # 注释掉这两行
+TARGET_LIB:&#x3D; libnvdsinfer_custom_impl_Yolo.so
+#TARGET_LIB:&#x3D; libnvdsinfer_custom_impl_Yolo.so
+TARGET_OBJS:&#x3D; $(SRCFILES:.cpp&#x3D;.o)
+TARGET_OBJS:&#x3D; $(TARGET_OBJS:.cu&#x3D;.o)
+
+all: $(TARGET_LIB)
+
+%.o: %.cpp $(INCS) Makefile
+  $(CC) -c -o $@ $(CFLAGS) $&lt;
+
+%.o: %.cu $(INCS) Makefile
+  $(NVCC) -c -o $@ --compiler-options &#39;-fPIC&#39; $&lt;
+
+$(TARGET_LIB) : $(TARGET_OBJS)
+  $(CC) -o $@  $(TARGET_OBJS) $(LFLAGS)
+
+clean:
+  rm -rf $(TARGET_LIB)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+上述Makefile文件的修改具体解释可以参考我的另一篇博客，里面详细记录了相关内容：<a target="_blank" rel="noopener" href="https://sprli.github.io/2023/05/26/Cmake_Study/">https://sprli.github.io/2023/05/26/Cmake_Study/</a></li>
+</ul>
+</li>
+</ol>
+<h4 id="运行及使用">运行及使用</h4>
+<p>运行使用命令：</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">sudo LD_PRELOAD&#x3D;&#x2F;home&#x2F;nano&#x2F;Desktop&#x2F;Yolov5-in-Deepstream-5.0&#x2F;Deepstream5.0&#x2F;libmyplugins.so:&#x2F;opt&#x2F;ros&#x2F;melodic&#x2F;lib&#x2F;libserial.so deepstream-app -c &#x2F;home&#x2F;nano&#x2F;Desktop&#x2F;Yolov5-in-Deepstream-5.0&#x2F;Deepstream5.0&#x2F;deepstream_app_config_yoloV5.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="如何实现程序自启动">如何实现程序自启动</h3>
+</article><section class="jump-container is-flex is-justify-content-space-between my-6"><!-- em is empty placeholder--><a class="button is-default" href="/2024/02/06/TCP_Commer/" title="基于电力载波的TCP通信实现"><i class="iconfont icon-prev mr-2 has-text-grey"></i><span class="has-text-weight-semibold">上一页: 基于电力载波的TCP通信实现</span></a><a class="button is-default" href="/2023/05/26/Cmake_Study/" title="cmake学习记录"><span class="has-text-weight-semibold">下一页: cmake学习记录</span><i class="iconfont icon-next ml-2 has-text-grey"></i></a></section><article class="mt-6 comment-container"><script async repo="lzule/lzule.github.io" src="https://utteranc.es/client.js" issue-term="pathname" theme="preferred-color-scheme"></script></article><article class="mt-6 comment-container" id="vcomments"></article></div></div></main></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/lzule"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><a title="rss" target="_blank" rel="noopener nofollow" href="/atom.xml"><i class="iconfont icon-rss"></i></a><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 李祖乐 2024</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script src="/js/jquery-3.6.1.min.js"></script><script src="/js/jquery-fancybox.min.js"></script><script src="/js/img_zoom.js"></script><script src="/js/post.js"></script></body></html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html><html class="appearance-auto" lang="zh-CN"><head><meta charset="UTF-8"><title>李祖乐's blog</title><meta name="description" content="No Pain No Gain"><meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1"><!-- Google Analytics --><!-- End Google Analytics -->
+<!-- Baidu Analytics --><script>var _hmt = _hmt || [];
+(function() {
+var hm = document.createElement("script");
+hm.src = "//hm.baidu.com/hm.js?" + 'a2b0a21b8323843c2fcd318760ad1079';
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();</script><!-- End Baidu Analytics --><link rel="icon" href="/images/favicon.ico"><link rel="stylesheet" href="/style/common/bulma.css"><link rel="stylesheet" href="/style/base.css"><link rel="stylesheet" href="/style/common/helper.css"><script src="/js/common.js"></script><link rel="stylesheet" href="/style/widget-post-list.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="李祖乐的博客" type="application/atom+xml">
+</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">李祖乐's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><article class="post-container is-flex is-justify-content-center section container is-max-widescreen pt-4 px-2"><div class="columns is-variable is-1-tablet is-3-desktop-only is-2-widescreen is-full-width"><section class="column"><article class="post-item-card"><header class="is-relative is-flex"><div class="post-cover-backdrop is-hidden"><img src="/images/Self_Start_Jetson/nano_pic.png" alt="loading.."></div><a class="post-cover-link has-text-centered skeleton" href="/2024/03/27/Self_Start/"><img class="post-cover-img js-img-fadeIn" src="/images/Self_Start_Jetson/nano_pic.png" alt="loading.." data-backdrop="true"></a></header><section class="content post-card-content p-4 pb-5"><header><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/Raspberry"><i class="tag post-item-tag">Raspberry</i></a><a href="/tags/%E8%87%AA%E5%90%AF%E5%8A%A8"><i class="tag post-item-tag">自启动</i></a></header><h2 class="mt-4 mb-0 is-family-serif"><a href="/2024/03/27/Self_Start/">Jetson nano/Raspberry自启动设置以及取消sudo</a></h2><time class="has-text-grey" datetime="2024-03-27T10:20:59.335Z">2024-03-27</time><p class="is-flex-grow-2 mt-2">
+一、免密码登录
+1.1 Raspberry免密码登录
+
+修改/etc/lightdm/lightdm.conf文件
+sudo nano /etc/lightdm/lightdm.conf
+按下图红框进行修改，其中将haicao替换为你的用户名
+
+
+1.2 Jetson nano免密码登录
+
+修改/etc/lightdm/lightdm.conf文件
+sudo nano /etc/gdm3/custom.conf
+按下图红框进行修改，其中将haicao替换为你的用户名
+
+
+二、取消sudo密码
+2.1 取消Jetson nano的sudo密码
+
+首先进入root模式  sudo su  # 进入root模式，输入exit退出root模式
+sudo visudo  # 编辑该文件
+
+然后按下图红框进行修改，其..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2024/03/27/Self_Start/">更多</a></section></article><article class="post-item-card"><header class="is-relative is-flex"><div class="post-cover-backdrop is-hidden"><img src="/images/PyQt/pyqt_pic.png" alt="loading.."></div><a class="post-cover-link has-text-centered skeleton" href="/2024/03/20/PyQt_help/"><img class="post-cover-img js-img-fadeIn" src="/images/PyQt/pyqt_pic.png" alt="loading.." data-backdrop="true"></a></header><section class="content post-card-content p-4 pb-5"><header><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/PyQt5"><i class="tag post-item-tag">PyQt5</i></a></header><h2 class="mt-4 mb-0 is-family-serif"><a href="/2024/03/20/PyQt_help/">Jetson Nano安装并使用PyQt5进行界面开发设计</a></h2><time class="has-text-grey" datetime="2024-03-20T09:48:33.913Z">2024-03-20</time><p class="is-flex-grow-2 mt-2">
+问题背景
+这个问题是我在做海草项目时，要在上位机Jetson Nano上制作相关界面，由于第一次接触该方面，由此写下该篇博客对其进行记录。
+一、安装PyQt5
+
+使用以下命令安装： sudo apt install pyqt5*
+sudo apt-get install python3-pyqt5
+
+导入PyQt5包至Python虚拟环境
+如果你需要在虚拟环境中使用PyQt5，按如下步骤将系统的PyQt5库链接到你的虚拟环境中
+
+首先在终端执行以下指令查找编译好的PyQt5库相关文件的路径  sudo find / -iname &quot;PyQt5*&quot; # 得到类似路径/usr/lib/python3/dist-packages/PyQt5
+sudo find / -iname &quot;*sip*&quot;   # 得到类似..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2024/03/20/PyQt_help/">更多</a></section></article><article class="post-item-card"><header class="is-relative is-flex"><div class="post-cover-backdrop is-hidden"><img src="/images/TCP_Commer/TCP_pic.jpg" alt="loading.."></div><a class="post-cover-link has-text-centered skeleton" href="/2024/02/06/TCP_Commer/"><img class="post-cover-img js-img-fadeIn" src="/images/TCP_Commer/TCP_pic.jpg" alt="loading.." data-backdrop="true"></a></header><section class="content post-card-content p-4 pb-5"><header><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/Raspberry"><i class="tag post-item-tag">Raspberry</i></a><a href="/tags/TCP%E9%80%9A%E4%BF%A1"><i class="tag post-item-tag">TCP通信</i></a><a href="/tags/%E7%94%B5%E5%8A%9B%E8%BD%BD%E6%B3%A2"><i class="tag post-item-tag">电力载波</i></a></header><h2 class="mt-4 mb-0 is-family-serif"><a href="/2024/02/06/TCP_Commer/">基于电力载波的TCP通信实现</a></h2><time class="has-text-grey" datetime="2024-02-05T16:03:24.101Z">2024-02-06</time><p class="is-flex-grow-2 mt-2">
+问题背景
+这是我在做海草移植项目过程中需要实现的功能——使用电力载波连接Jetson Nano与Raspberry实现信息互通，写下此篇博客以作记录
+一、TCP通信
+1.1 简单介绍
+TCP协议，传输控制协议（英语：Transmission Control Protocol，缩写为：TCP）是一种面向连接的、可靠的、基于字节流的通信协议。
+TCP把连接作为最基本的抽象单元，每条TCP连接有两个端点，TCP连接的端点即套接字。
+套接字: socket = (IP地址 + 端口号)
+TCP连接:{socket1, socket2}={(IP1:port1), (IP2:port2)}
+TCP提供全双工通信。
+详细解释可参考网上资料。
+1.2 一般用法
+进行TCP通信的两端设备必须要在同一区域网或者网段内。如果..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2024/02/06/TCP_Commer/">更多</a></section></article><section class="paginator is-flex is-justify-content-flex-end is-flex-wrap-wrap mt-5"><span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="iconfont icon-next has-text-grey"></i></a></section></section><aside class="column is-hidden-mobile is-4-tablet is-3-widescreen"><style>.search-widget .search-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--second-text-color);
+}
+.search-widget .search-content {
+    position: absolute;
+    left: 0;
+    top: calc(100% - 3px);
+    z-index: 2;
+
+    width: 100%;
+    height: 0;
+    max-height: 550px;
+
+    overflow: auto;
+    box-sizing: border-box;
+
+    background: var(--top-bar-bg-color);
+    backdrop-filter: blur(var(--backdropFilter));
+    -webkit-backdrop-filter: blur(var(--backdropFilter));
+
+    border-bottom-left-radius: var(--borderRadius);
+    border-bottom-right-radius: var(--borderRadius);
+    box-shadow: 0 12px 15px rgba(0, 0, 0, 0.08);
+}
+
+.search-widget .search-content a:hover h5 {
+    color: #3273dc!important;
+}
+</style><main class="aside-card-container search-widget is-relative"><label for="searchInput"><div class="is-flex px-4" id="searchButton"><i class="iconfont icon--search1 mr-1"></i><input class="search-input is-flex-grow-1" id="searchInput" placeholder="搜索内容.."></div></label><section class="search-content content" id="searchContent"></section></main><script>var searchDatabase = []
+var searchInputEl = document.getElementById('searchInput')
+var searchButtonEl = document.getElementById('searchButton')
+var searchResultEl = document.getElementById('searchContent')
+
+searchInputEl.oninput = function (evt) {
+    var searchValue = evt.srcElement.value
+    var haveSearchValue = Boolean(searchValue.trim())
+    if (!haveSearchValue) {
+        searchResultEl.style.height = 0
+        searchResultEl.innerHTML = null
+        return
+    }
+
+    var searchResults = searching(searchValue)
+
+    if (searchResults.length > 0) {
+        renderSearchResults(searchResults)
+    }
+}
+
+function renderSearchResults(results) {
+    searchResultEl.innerHTML = null
+    var fragment = document.createDocumentFragment()
+
+    results.forEach(function (item) {
+        var link = document.createElement('a')
+        var title = document.createElement('h5')
+        var content = document.createElement('p')
+
+        title.className = 'mb-1'
+        title.innerText = item.title
+        content.innerText = item.content
+
+        link.href = item.link
+        link.appendChild(title)
+        link.appendChild(content)
+        link.className = 'p-4 is-block'
+
+        fragment.appendChild(link)
+    })
+
+    searchResultEl.appendChild(fragment)
+    searchResultEl.style.height = 'auto'
+}
+
+function searching(inputText) {
+    var inputTexts = inputText.split(' ')
+    var searchResults = []
+    inputTexts.forEach(function (searchKey) {
+        var haveSearchValue = Boolean(searchKey.trim())
+        if (!haveSearchValue) return
+
+        var key = searchKey.toLowerCase()
+
+        for (var entry of searchDatabase) {
+            var title = entry.getElementsByTagName('title')[0].textContent
+            var link = entry.getElementsByTagName('link')[0].getAttribute('href')
+            var contentWithTags = entry.getElementsByTagName('content')[0].textContent
+            var rawContent = contentWithTags.trim().replace(/<[^>]+>/g, '').toLowerCase()
+
+            var LENGTH = 80
+            var finalContent = ''
+            var contentLength = rawContent.length
+            var searchResultIdx = rawContent.indexOf(key)
+
+            var startIdx = searchResultIdx - 20,
+                endIdx = startIdx + LENGTH
+
+            if (startIdx < 0) {
+                startIdx = 0
+                endIdx = 100
+            }
+
+            endIdx > contentLength && (endIdx = contentLength)
+
+            finalContent = rawContent.substring(startIdx, endIdx)
+
+            if (title.indexOf(key) > -1 || searchResultIdx > -1) {
+                searchResults.push({
+                    link: link,
+                    title: title,
+                    content: finalContent
+                })
+            }
+        }
+    })
+    return searchResults
+}
+
+searchButtonEl.onclick = function () {
+    if (searchDatabase.length > 0) return;
+
+    fetch(window.location.href + '/search.xml').then(res => res.text()).then(res => {
+        var domparser = new DOMParser
+        var doc = domparser.parseFromString(res, 'application/xml')
+        searchDatabase = doc.getElementsByTagName('search')[0].children
+    })
+}</script><main class="aside-card-container profile-widget"><!-- todo: 使用取色工具动态阴影--><section class="is-flex is-flex-direction-column is-justify-content-center is-align-items-center"><section class="is-flex is-justify-content-center avatar is-clipped skeleton"><!-- debug images "https://api.ixiaowai.cn/gqapi/gqapi.php"--><img class="js-img-fadeIn" src="/images/head_pic.jpg" alt="user avatar"></section><h3 class="user-name">李祖乐</h3><blockquote class="has-text-centered is-relative"><span style="margin-bottom: 5px;">No Pain No Gain</span></blockquote><address class="has-text-centered has-text-grey"><i class="iconfont icon-location" style="margin-right: 5px;"></i><span class="has-text-grey">In China</span></address></section><section class="sns-container is-flex is-justify-content-center is-align-items-center"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/lzule"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><a title="rss" target="_blank" rel="noopener nofollow" href="/atom.xml"><i class="iconfont icon-rss"></i></a><!-- 知乎--><!-- 领英--><!-- 脸书--></section></main><main class="aside-card-container recent-widget"><h3>最近</h3><ul><li class="is-flex"><!-- change to element replace image placeholder--><img class="js-img-fadeIn" src="/images/Self_Start_Jetson/nano_pic.png" alt="cover"><!--else--><!--    div.post-img-placeholder--><section class="is-flex-grow-2"><p class="has-text-weight-semibold" style="line-height: 20px; font-size: 14px"><a href="/2024/03/27/Self_Start/">Jetson nano/Raspberry自启动设置以及取消sudo</a></p><time class="has-text-weight-semibold has-text-grey" datetime="2024-03-27T10:20:59.335Z">2024-03-27</time></section></li><li class="is-flex"><!-- change to element replace image placeholder--><img class="js-img-fadeIn" src="/images/PyQt/pyqt_pic.png" alt="cover"><!--else--><!--    div.post-img-placeholder--><section class="is-flex-grow-2"><p class="has-text-weight-semibold" style="line-height: 20px; font-size: 14px"><a href="/2024/03/20/PyQt_help/">Jetson Nano安装并使用PyQt5进行界面开发设计</a></p><time class="has-text-weight-semibold has-text-grey" datetime="2024-03-20T09:48:33.913Z">2024-03-20</time></section></li><li class="is-flex"><!-- change to element replace image placeholder--><img class="js-img-fadeIn" src="/images/TCP_Commer/TCP_pic.jpg" alt="cover"><!--else--><!--    div.post-img-placeholder--><section class="is-flex-grow-2"><p class="has-text-weight-semibold" style="line-height: 20px; font-size: 14px"><a href="/2024/02/06/TCP_Commer/">基于电力载波的TCP通信实现</a></p><time class="has-text-weight-semibold has-text-grey" datetime="2024-02-05T16:03:24.101Z">2024-02-06</time></section></li></ul></main><main class="aside-card-container categories-widget category-page"><h3>分类</h3><section><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%BD%E6%9D%BF%E5%BC%80%E5%8F%91/">载板开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/">问题解决</a><span class="category-list-count">5</span></li></ul></section></main><main class="aside-card-container archives-widget"><h3>归档</h3><section><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">三月 2024</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">二月 2024</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">六月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">五月 2023</a><span class="archive-list-count">4</span></li></ul></section></main><main class="aside-card-container tag-widget"><h3>标签</h3><section><a href="/tags/Cmake"><span class="tag post-item-tag" style="margin-bottom: 5px;">Cmake</span></a><a href="/tags/Jetson"><span class="tag post-item-tag" style="margin-bottom: 5px;">Jetson</span></a><a href="/tags/Pytorch"><span class="tag post-item-tag" style="margin-bottom: 5px;">Pytorch</span></a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><span class="tag post-item-tag" style="margin-bottom: 5px;">深度学习</span></a><a href="/tags/PyQt5"><span class="tag post-item-tag" style="margin-bottom: 5px;">PyQt5</span></a><a href="/tags/Raspberry"><span class="tag post-item-tag" style="margin-bottom: 5px;">Raspberry</span></a><a href="/tags/%E8%87%AA%E5%90%AF%E5%8A%A8"><span class="tag post-item-tag" style="margin-bottom: 5px;">自启动</span></a><a href="/tags/TensorRT"><span class="tag post-item-tag" style="margin-bottom: 5px;">TensorRT</span></a><a href="/tags/Onnx"><span class="tag post-item-tag" style="margin-bottom: 5px;">Onnx</span></a><a href="/tags/TCP%E9%80%9A%E4%BF%A1"><span class="tag post-item-tag" style="margin-bottom: 5px;">TCP通信</span></a><a href="/tags/%E7%94%B5%E5%8A%9B%E8%BD%BD%E6%B3%A2"><span class="tag post-item-tag" style="margin-bottom: 5px;">电力载波</span></a><a href="/tags/DeepStream"><span class="tag post-item-tag" style="margin-bottom: 5px;">DeepStream</span></a><a href="/tags/ROS"><span class="tag post-item-tag" style="margin-bottom: 5px;">ROS</span></a><a href="/tags/Yolov5"><span class="tag post-item-tag" style="margin-bottom: 5px;">Yolov5</span></a></section></main><main class="aside-card-container friend-widget"><h3>友链</h3><section><a target="_blank" rel="noopener" href="https://www.google.com/"><span class="tag post-item-tag" style="margin-bottom: 5px;">Google</span></a><a target="_blank" rel="noopener" href="https://www.github.com/"><span class="tag post-item-tag" style="margin-bottom: 5px;">Github</span></a><a target="_blank" rel="noopener" href="https://www.baidu.com/"><span class="tag post-item-tag" style="margin-bottom: 5px;">Baidu</span></a></section></main></aside></div></article><script>$claudia.fadeInImage(null, $claudia.blurBackdropImg)
+
+window.addEventListener('resize', $claudia.throttle(function () {
+    var images = document.querySelectorAll('.js-img-fadeIn')
+
+    images.forEach($claudia.blurBackdropImg)
+}, 150))</script></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/lzule"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><a title="rss" target="_blank" rel="noopener nofollow" href="/atom.xml"><i class="iconfont icon-rss"></i></a><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 李祖乐 2024</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script>$claudia.fadeInImage(null, $claudia.blurBackdropImg)
+
+window.addEventListener('resize', $claudia.throttle(function () {
+    var images = document.querySelectorAll('.js-img-fadeIn')
+
+    images.forEach($claudia.blurBackdropImg)
+}, 150))</script></body></html>

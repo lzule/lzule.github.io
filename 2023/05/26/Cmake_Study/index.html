@@ -1,0 +1,152 @@
+<!DOCTYPE html><html class="appearance-auto" lang="zh-CN"><head><meta charset="UTF-8"><title>cmake学习记录</title><meta name="description" content="No Pain No Gain"><meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1"><!-- Google Analytics --><!-- End Google Analytics -->
+<!-- Baidu Analytics --><script>var _hmt = _hmt || [];
+(function() {
+var hm = document.createElement("script");
+hm.src = "//hm.baidu.com/hm.js?" + 'a2b0a21b8323843c2fcd318760ad1079';
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();</script><!-- End Baidu Analytics --><link rel="icon" href="/images/favicon.ico"><link rel="stylesheet" href="/style/common/bulma.css"><link rel="stylesheet" href="/style/base.css"><link rel="stylesheet" href="/style/common/helper.css"><script src="/js/common.js"></script><link rel="stylesheet" href="/style/post.css"><link rel="stylesheet" href="/style/themes/highlight-theme-light.css"><link rel="stylesheet" href="/style/common/jquery.fancybox.min.css"><script src="/js/highlight.pack.js"></script><meta name="description" content="
+问题背景
+这个问题是我在做海赛C2比赛编写部署自动打靶算法遇到的。先简单叙述一下起因，由于我们C2队伍使用的是Jetson Nano来识别靶心，进而实现自动打靶功能，于是算法识别这方面就由我来进展。在网上参考了一些部署方案。最终选择了使用Deepstream架构运行yolov5n的trt模型进行识别检测。但是由于我们的需求不仅是检测到靶心，还要将检测到的靶心的位置传递给下位机stm32，因此我需要在该架构中加入串口通信模块，实现该功能。由于Deepstream在国内的相关资料很少，故需要自己去了解并实现添加该模块到这个框架中。而且其代码基本都是C++代码，过程中要用到cmake等编译工具，故而接触到了cmake相关文件的编写与使用，并写下该篇博客对其进行记录。
+一、cmake是什么
+CMake是一个跨平台.."><script src="//unpkg.com/valine/dist/Valine.min.js"></script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="李祖乐的博客" type="application/atom+xml">
+</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">李祖乐's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"><div class="is-full-height" id="postTopic"><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">cmake学习记录</p><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">点击返回顶部</p></div></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><main class="container is-max-widescreen content section post-page pt-4 px-4"><div class="columns is-flex-desktop is-justify-content-center is-flex-direction-row-reverse"><div class="column is-3 is-hidden-mobile"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E8%83%8C%E6%99%AF"><span class="toc-text">问题背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81cmake%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">一、cmake是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81cmake%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">二、cmake的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-CMakeLists-txt%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="toc-text">2.1 CMakeLists.txt的语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-Makefile%E7%9B%B8%E5%85%B3%E8%AF%AD%E6%B3%95"><span class="toc-text">2.2 Makefile相关语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-LD-PRELOAD%E5%8A%A0%E8%BD%BD%E5%8A%A8%E6%80%81%E5%BA%93"><span class="toc-text">2.3 LD_PRELOAD加载动态库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E7%9B%B8%E5%85%B3%E7%BC%96%E8%AF%91%E5%91%BD%E4%BB%A4"><span class="toc-text">2.4 相关编译命令</span></a></li></ol></li></ol></div><div class="column is-9"><header class="my-4"><a href="/tags/Cmake"><i class="tag post-item-tag">Cmake</i></a></header><h1 class="mt-0 mb-1 is-family-serif" id="postTitle">cmake学习记录</h1><time class="has-text-grey" datetime="2023-05-26T03:48:14.194Z">2023-05-26</time><article class="mt-2 post-content"><p><img src="/images/Cmake/cmake_pic.jpg" alt="cover"></p>
+<h2 id="问题背景">问题背景</h2>
+<p>这个问题是我在做海赛C2比赛编写部署自动打靶算法遇到的。先简单叙述一下起因，由于我们C2队伍使用的是Jetson Nano来识别靶心，进而实现自动打靶功能，于是算法识别这方面就由我来进展。在网上参考了一些部署方案。最终选择了使用Deepstream架构运行yolov5n的trt模型进行识别检测。但是由于我们的需求不仅是检测到靶心，还要将检测到的靶心的位置传递给下位机stm32，因此我需要在该架构中加入串口通信模块，实现该功能。由于Deepstream在国内的相关资料很少，故需要自己去了解并实现添加该模块到这个框架中。而且其代码基本都是C++代码，过程中要用到cmake等编译工具，故而接触到了cmake相关文件的编写与使用，并写下该篇博客对其进行记录。</p>
+<h2 id="一、cmake是什么">一、cmake是什么</h2>
+<p>CMake是一个跨平台的编译(Build)工具,可以用简单的语句来描述所有平台的编译过程。<br>
+CMake能够输出各种各样的makefile或者project文件，能测试编译器所支持的C++特性。<br>
+假如我们有一个深度学习框架的部分工程列表，里面有超过40个互相调用的工程共同组成，一些用于生成库文件，一些用于实现逻辑功能。他们之间的调用关系复杂而严格，如果我想在这样复杂的框架下进行二次开发，显然只拥有它的源码是远远不够的，还需要清楚的明白这几十个项目之间的复杂关系，在没有原作者的帮助下进行这项工作几乎是不可能的。即使原作者给出了相关的结构文档，对新手来说建立工程的过程依旧是漫长而艰辛的，因此CMake的作用就凸显出来了。原作者只需要生成一份CMakeLists.txt文档，框架的使用者们只需要在下载源码的同时下载作者提供的CMakeLists.txt，就可以利用CMake，在“原作者的帮助下”进行工程的搭建。</p>
+<h2 id="二、cmake的使用">二、cmake的使用</h2>
+<h3 id="2-1-CMakeLists-txt的语法">2.1 CMakeLists.txt的语法</h3>
+<p>先附上相关代码</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">cmake_minimum_required(VERSION 3.10)
+project(yolov5)
+add_definitions(-std&#x3D;c++11)
+add_definitions(-DAPI_EXPORTS)
+option(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_BUILD_TYPE Debug)
+
+# TODO(Call for PR): make cmake compatible with Windows
+set(CMAKE_CUDA_COMPILER &#x2F;usr&#x2F;local&#x2F;cuda&#x2F;bin&#x2F;nvcc)
+enable_language(CUDA)
+
+include_directories(&#x2F;opt&#x2F;ros&#x2F;melodic&#x2F;include)
+
+# include and link dirs of cuda and tensorrt, you need adapt them if yours are different
+# cuda
+include_directories(&#x2F;usr&#x2F;local&#x2F;cuda&#x2F;include)
+link_directories(&#x2F;usr&#x2F;local&#x2F;cuda&#x2F;lib64)
+# tensorrt
+# TODO(Call for PR): make TRT path configurable from command line
+include_directories(&#x2F;home&#x2F;nvidia&#x2F;TensorRT-8.2.5.1&#x2F;include&#x2F;)
+link_directories(&#x2F;home&#x2F;nvidia&#x2F;TensorRT-8.2.5.1&#x2F;lib&#x2F;)
+
+include_directories($&#123;PROJECT_SOURCE_DIR&#125;&#x2F;src&#x2F;)
+include_directories($&#123;PROJECT_SOURCE_DIR&#125;&#x2F;plugin&#x2F;)
+file(GLOB_RECURSE SRCS $&#123;PROJECT_SOURCE_DIR&#125;&#x2F;src&#x2F;*.cpp $&#123;PROJECT_SOURCE_DIR&#125;&#x2F;src&#x2F;*.cu)
+file(GLOB_RECURSE PLUGIN_SRCS $&#123;PROJECT_SOURCE_DIR&#125;&#x2F;plugin&#x2F;*.cu)
+
+add_library(myplugins SHARED $&#123;PLUGIN_SRCS&#125;)
+target_link_libraries(myplugins nvinfer cudart)
+
+find_package(OpenCV)
+include_directories($&#123;OpenCV_INCLUDE_DIRS&#125;)
+
+add_executable(yolov5_det yolov5_det.cpp $&#123;SRCS&#125;)
+target_link_libraries(yolov5_det nvinfer)
+target_link_libraries(yolov5_det cudart)
+target_link_libraries(yolov5_det myplugins)
+target_link_libraries(yolov5_det $&#123;OpenCV_LIBS&#125;)
+target_link_libraries(yolov5_det &#x2F;opt&#x2F;ros&#x2F;melodic&#x2F;lib&#x2F;libserial.so)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>相关解释：<br>
+由于我也是浅浅地了解使用，就只介绍我理解的几个函数吧</p>
+<ul>
+<li>project(yolov5) 表示定义一个名为yolov5的工程</li>
+<li>include_directories(/opt/ros/melodic/include) 可以这样来理解，加入我们需要引入一个头文件&lt;serial/serial.h&gt;，但是这个头文件是在路径/opt/ros/melodic/include路径下，而你的文件路径却不在该路径下，如果使用#include &quot;/opt/ros/melodic/include/serial/serial.h&quot;的话未免太过麻烦了，但是如果在CmakeList.txt中加入include_directories(/opt/ros/melodic/include)一句，那么我们就可以使用#include &quot;serial/serial.h&quot;简单地引入该头文件了。</li>
+<li>file(GLOB_RECURSE PLUGIN_SRCS ${PROJECT_SOURCE_DIR}/plugin/*.cu) 表示在项目源代码目录中的plugin子目录中查找所有扩展名为.cu的CUDA源文件，并将它们存储在PLUGIN_SRCS变量中</li>
+<li>add_library(myplugins SHARED ${PLUGIN_SRCS}) 表示创建一个名为myplugins的共享库，并将PLUGIN_SRCS变量中的所有CUDA源文件链接到该库中。</li>
+<li>link_directories(/home/nvidia/TensorRT-8.2.5.1/lib/) 是指将TensorRT库的路径添加到编译器的库搜索路径中，以便编译器可以找到所需的库文件</li>
+<li>add_executable(yolov5_det yolov5_det.cpp ${SRCS}) 表示在当前路径下编译一个名为yolov5_det的可执行文件，该文件的源代码位于yolov5_det.cpp文件中，而其他源文件位于SRCS变量中。</li>
+<li>target_link_libraries(yolov5_det /opt/ros/melodic/lib/libserial.so) 表示将名为yolov5_det的目标文件与名为libserial.so的库文件链接，以便在运行时可以使用该库文件中定义的函数和变量。</li>
+</ul>
+<p>明白了上面这些语句的基本用法，我们就可以在源文件的基础上加上我们的代码，实现我们想要的功能了。</p>
+<h3 id="2-2-Makefile相关语法">2.2 Makefile相关语法</h3>
+<p>有时候我们得到的文件中没有CMakeList.txt文件，但是会有Makefile文件，这时如果我们想修改一下代码以引入一些其他功能，也不是不可能，可以试着修改Makefile文件，尝试实现我们想要的功能。<br>
+先附上相关代码</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">CUDA_VER?&#x3D;
+ifeq ($(CUDA_VER),)
+	$(error &quot;CUDA_VER is not set&quot;)
+endif
+
+OPENCV?&#x3D;
+ifeq ($(OPENCV),)
+	OPENCV&#x3D;0
+endif
+
+CC:&#x3D; g++
+NVCC:&#x3D;&#x2F;usr&#x2F;local&#x2F;cuda-$(CUDA_VER)&#x2F;bin&#x2F;nvcc
+
+CFLAGS:&#x3D; -Wall -std&#x3D;c++11 -shared -fPIC -Wno-error&#x3D;deprecated-declarations
+CFLAGS+&#x3D; -I&#x2F;opt&#x2F;nvidia&#x2F;deepstream&#x2F;deepstream&#x2F;sources&#x2F;includes -I&#x2F;usr&#x2F;local&#x2F;cuda-$(CUDA_VER)&#x2F;include
+
+ifeq ($(OPENCV), 1)
+	COMMON&#x3D; -DOPENCV
+	CFLAGS+&#x3D; $(shell pkg-config --cflags opencv4 2&gt; &#x2F;dev&#x2F;null || pkg-config --cflags opencv)
+	LIBS+&#x3D; $(shell pkg-config --libs opencv4 2&gt; &#x2F;dev&#x2F;null || pkg-config --libs opencv)
+endif
+
+CUFLAGS:&#x3D; -I&#x2F;opt&#x2F;nvidia&#x2F;deepstream&#x2F;deepstream&#x2F;sources&#x2F;includes -I&#x2F;usr&#x2F;local&#x2F;cuda-$(CUDA_VER)&#x2F;include
+
+LIBS+&#x3D; -lnvinfer_plugin -lnvinfer -lnvparsers -L&#x2F;usr&#x2F;local&#x2F;cuda-$(CUDA_VER)&#x2F;lib64 -lcudart -lcublas -lstdc++fs
+LFLAGS:&#x3D; -shared -Wl,--start-group $(LIBS) -Wl,--end-group
+
+INCS:&#x3D; $(wildcard *.h)
+
+SRCFILES:&#x3D; $(filter-out calibrator.cpp, $(wildcard *.cpp))
+
+ifeq ($(OPENCV), 1)
+	SRCFILES+&#x3D; calibrator.cpp
+endif
+
+SRCFILES+&#x3D; $(wildcard layers&#x2F;*.cpp)
+SRCFILES+&#x3D; $(wildcard *.cu)
+
+TARGET_LIB:&#x3D; libnvdsinfer_custom_impl_Yolo.so
+
+TARGET_OBJS:&#x3D; $(SRCFILES:.cpp&#x3D;.o)
+TARGET_OBJS:&#x3D; $(TARGET_OBJS:.cu&#x3D;.o)
+
+all: $(TARGET_LIB)
+
+%.o: %.cpp $(INCS) Makefile
+	$(CC) -c $(COMMON) -o $@ $(CFLAGS) $&lt;
+
+%.o: %.cu $(INCS) Makefile
+	$(NVCC) -c -o $@ --compiler-options &#39;-fPIC&#39; $(CUFLAGS) $&lt;
+
+$(TARGET_LIB) : $(TARGET_OBJS)
+	$(CC) -o $@  $(TARGET_OBJS) $(LFLAGS)
+
+clean:
+	rm -rf $(TARGET_LIB)
+	rm -rf $(TARGET_OBJS)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在上述代码中，我们只需要知道几个函数便可以实现我们想要的功能</p>
+<ul>
+<li>CFLAGS+= -I/opt/nvidia/deepstream/deepstream/sources/includes -I/usr/local/cuda-$ 在这里表示定义一个名为CUFLAGS的变量，于指定编译CUDA源文件时要使用的选项。其中，-I选项用于指定要包含的头文件路径，/opt/nvidia/deepstream/deepstream/sources/includes和/usr/local/cuda-$(CUDA_VER)/include分别是两个包含的头文件路径。在Makefile中，变量用于存储值，可以在Makefile中的其他位置使用。如果我们想在待编译的cpp文件中引入&lt;serial/serial.h&gt;头文件，那么可以在其后加上这句:CFLAGS+= -I/opt/ros/melodic/include</li>
+<li>LIBS+= -lnvinfer_plugin -lnvinfer -lnvparsers -L/usr/local/cuda-$(CUDA_VER)/lib64 -lcudart -lcublas -lstdc++fs 表示定义一个名为LIBS的变量，其中包含要链接的库文件列表，包括nvinfer_plugin、nvinfer、nvparsers、cudart、cublas和stdc++fs库文件。如果我们想链接库文件/opt/ros/melodic/lib/libserial.so，那么我们可以加上这句:LIBS+= -L/opt/ros/melodic/lib -lserial</li>
+</ul>
+<p>一般来说了解了这两句就基本可以解决大部分问题了</p>
+<h3 id="2-3-LD-PRELOAD加载动态库">2.3 LD_PRELOAD加载动态库</h3>
+<p>LD_PRELOAD是个环境变量，用于动态库的加载，动态库加载的优先级最高，一般情况下，其加载顺序为LD_PRELOAD &gt; LD_LIBRARY_PATH &gt; /etc/ld.so.cache &gt; /lib&gt;/usr/lib。程序中我们经常要调用一些外部库的函数，以open()和execve()为例，如果我们有个自定义这两函数，把它编译成动态库后，通过LD_PRELOAD加载，当程序中调用open函数时，调用的其实是我们自定义的函数。这个功能可以帮助我们实现在执行文件外部链接一些库文件。</p>
+<h3 id="2-4-相关编译命令">2.4 相关编译命令</h3>
+<p>一般来说，我们会在CMakeList.txt的同级路径下创建一个build文件夹（文件夹命名可随意），然后进入到build文件夹后，打开终端，然后输入命令：<code>cmake ..</code><br>
+之后待编译完成后，我们会发现在build文件夹下会出现Makefile文件，随后我们再在命令行中输入命令：<code>make</code><br>
+成功之后，便会生成我们想要的可执行文件了。<br>
+相对路径如下所示：<br>
+----CMakeList.txt   (<code>$ mkdir build</code>)<br>
+----build          (<code>$ cd build</code>)(<code>$ cmake ..</code>)<br>
+--------Makefile   (<code>$ make</code>)<br>
+--------相关可执行文件</p>
+</article><section class="jump-container is-flex is-justify-content-space-between my-6"><!-- em is empty placeholder--><a class="button is-default" href="/2023/06/14/ocean_competC2/" title="关于在Jetson部署Yolov5实现检测与串口通信传送位置信息"><i class="iconfont icon-prev mr-2 has-text-grey"></i><span class="has-text-weight-semibold">上一页: 关于在Jetson部署Yolov5实现检测与串口通信传送位置信息</span></a><a class="button is-default" href="/2023/05/18/build_web/" title="关于如何使用Hexo搭建自己的Github网站"><span class="has-text-weight-semibold">下一页: 关于如何使用Hexo搭建自己的Github网站</span><i class="iconfont icon-next ml-2 has-text-grey"></i></a></section><article class="mt-6 comment-container"><script async repo="lzule/lzule.github.io" src="https://utteranc.es/client.js" issue-term="pathname" theme="preferred-color-scheme"></script></article><article class="mt-6 comment-container" id="vcomments"></article></div></div></main></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/lzule"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><a title="rss" target="_blank" rel="noopener nofollow" href="/atom.xml"><i class="iconfont icon-rss"></i></a><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 李祖乐 2024</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script src="/js/jquery-3.6.1.min.js"></script><script src="/js/jquery-fancybox.min.js"></script><script src="/js/img_zoom.js"></script><script src="/js/post.js"></script></body></html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html><html class="appearance-auto" lang="zh-CN"><head><meta charset="UTF-8"><title>李祖乐's blog</title><meta name="description" content="No Pain No Gain"><meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1"><!-- Google Analytics --><!-- End Google Analytics -->
+<!-- Baidu Analytics --><script>var _hmt = _hmt || [];
+(function() {
+var hm = document.createElement("script");
+hm.src = "//hm.baidu.com/hm.js?" + 'a2b0a21b8323843c2fcd318760ad1079';
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hm, s);
+})();</script><!-- End Baidu Analytics --><link rel="icon" href="/images/favicon.ico"><link rel="stylesheet" href="/style/common/bulma.css"><link rel="stylesheet" href="/style/base.css"><link rel="stylesheet" href="/style/common/helper.css"><script src="/js/common.js"></script><link rel="stylesheet" href="/style/widget-post-list.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="李祖乐的博客" type="application/atom+xml">
+</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">李祖乐's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"><span>分类 · 问题解决</span></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><article class="post-container is-flex is-justify-content-center section container is-max-widescreen pt-4 px-2"><div class="columns is-variable is-1-tablet is-3-desktop-only is-2-widescreen is-full-width"><section class="column"><article class="post-item-card"><header class="is-relative is-flex"><div class="post-cover-backdrop is-hidden"><img src="/images/TCP_Commer/TCP_pic.jpg" alt="loading.."></div><a class="post-cover-link has-text-centered skeleton" href="/2024/02/06/TCP_Commer/"><img class="post-cover-img js-img-fadeIn" src="/images/TCP_Commer/TCP_pic.jpg" alt="loading.." data-backdrop="true"></a></header><section class="content post-card-content p-4 pb-5"><header><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/Raspberry"><i class="tag post-item-tag">Raspberry</i></a><a href="/tags/TCP%E9%80%9A%E4%BF%A1"><i class="tag post-item-tag">TCP通信</i></a><a href="/tags/%E7%94%B5%E5%8A%9B%E8%BD%BD%E6%B3%A2"><i class="tag post-item-tag">电力载波</i></a></header><h2 class="mt-4 mb-0 is-family-serif"><a href="/2024/02/06/TCP_Commer/">基于电力载波的TCP通信实现</a></h2><time class="has-text-grey" datetime="2024-02-05T16:03:24.101Z">2024-02-06</time><p class="is-flex-grow-2 mt-2">
+问题背景
+这是我在做海草移植项目过程中需要实现的功能——使用电力载波连接Jetson Nano与Raspberry实现信息互通，写下此篇博客以作记录
+一、TCP通信
+1.1 简单介绍
+TCP协议，传输控制协议（英语：Transmission Control Protocol，缩写为：TCP）是一种面向连接的、可靠的、基于字节流的通信协议。
+TCP把连接作为最基本的抽象单元，每条TCP连接有两个端点，TCP连接的端点即套接字。
+套接字: socket = (IP地址 + 端口号)
+TCP连接:{socket1, socket2}={(IP1:port1), (IP2:port2)}
+TCP提供全双工通信。
+详细解释可参考网上资料。
+1.2 一般用法
+进行TCP通信的两端设备必须要在同一区域网或者网段内。如果..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2024/02/06/TCP_Commer/">更多</a></section></article><article class="post-item-card"><header class="is-relative is-flex"><div class="post-cover-backdrop is-hidden"><img src="/images/OceanC2/serial_pic.png" alt="loading.."></div><a class="post-cover-link has-text-centered skeleton" href="/2023/06/14/ocean_competC2/"><img class="post-cover-img js-img-fadeIn" src="/images/OceanC2/serial_pic.png" alt="loading.." data-backdrop="true"></a></header><section class="content post-card-content p-4 pb-5"><header><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><i class="tag post-item-tag">深度学习</i></a><a href="/tags/TensorRT"><i class="tag post-item-tag">TensorRT</i></a><a href="/tags/DeepStream"><i class="tag post-item-tag">DeepStream</i></a><a href="/tags/ROS"><i class="tag post-item-tag">ROS</i></a><a href="/tags/Yolov5"><i class="tag post-item-tag">Yolov5</i></a></header><h2 class="mt-4 mb-0 is-family-serif"><a href="/2023/06/14/ocean_competC2/">关于在Jetson部署Yolov5实现检测与串口通信传送位置信息</a></h2><time class="has-text-grey" datetime="2023-06-14T03:27:11.440Z">2023-06-14</time><p class="is-flex-grow-2 mt-2">
+问题背景
+这篇博客用来记录参加海赛C2过程中，如何实现在Jetson Nano上部署目标检测算法以及使用串口通信的方法。
+数据标注与模型训练
+YoloV5的使用与简单讲解
+Yolov5模型目前在网络上已经经过了许多考验，且其Github官方也仍在不断更新，其相关平台的部署在官网也有很多教程，所以如果想在嵌入式平台部署目标检测以及分类网络，选择Yolov5可以带给我们极大的便利，这也是我选择使用Yolov5的原因。以下内容都是基于Yolov5目标检测模型的部署。
+数据集的标注（使用Labelimg进行数据标注）
+
+
+安装labelimg
+这里是在Anaconda环境下的安装
+conda create -n label python&amp;#x3D;&amp;#x3D;3.9 # 注意这里必须是python3.9版本，否则..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2023/06/14/ocean_competC2/">更多</a></section></article><article class="post-item-card"><header class="is-relative is-flex"><div class="post-cover-backdrop is-hidden"><img src="/images/Cmake/cmake_pic.jpg" alt="loading.."></div><a class="post-cover-link has-text-centered skeleton" href="/2023/05/26/Cmake_Study/"><img class="post-cover-img js-img-fadeIn" src="/images/Cmake/cmake_pic.jpg" alt="loading.." data-backdrop="true"></a></header><section class="content post-card-content p-4 pb-5"><header><a href="/tags/Cmake"><i class="tag post-item-tag">Cmake</i></a></header><h2 class="mt-4 mb-0 is-family-serif"><a href="/2023/05/26/Cmake_Study/">cmake学习记录</a></h2><time class="has-text-grey" datetime="2023-05-26T03:48:14.194Z">2023-05-26</time><p class="is-flex-grow-2 mt-2">
+问题背景
+这个问题是我在做海赛C2比赛编写部署自动打靶算法遇到的。先简单叙述一下起因，由于我们C2队伍使用的是Jetson Nano来识别靶心，进而实现自动打靶功能，于是算法识别这方面就由我来进展。在网上参考了一些部署方案。最终选择了使用Deepstream架构运行yolov5n的trt模型进行识别检测。但是由于我们的需求不仅是检测到靶心，还要将检测到的靶心的位置传递给下位机stm32，因此我需要在该架构中加入串口通信模块，实现该功能。由于Deepstream在国内的相关资料很少，故需要自己去了解并实现添加该模块到这个框架中。而且其代码基本都是C++代码，过程中要用到cmake等编译工具，故而接触到了cmake相关文件的编写与使用，并写下该篇博客对其进行记录。
+一、cmake是什么
+CMake是一个跨平台..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2023/05/26/Cmake_Study/">更多</a></section></article><article class="post-item-card"><header class="is-relative is-flex"><div class="post-cover-backdrop is-hidden"><img src="/images/build_hexo/hexo_pic.jpg" alt="loading.."></div><a class="post-cover-link has-text-centered skeleton" href="/2023/05/18/build_web/"><img class="post-cover-img js-img-fadeIn" src="/images/build_hexo/hexo_pic.jpg" alt="loading.." data-backdrop="true"></a></header><section class="content post-card-content p-4 pb-5"><h2 class="mt-4 mb-0 is-family-serif"><a href="/2023/05/18/build_web/">关于如何使用Hexo搭建自己的Github网站</a></h2><time class="has-text-grey" datetime="2023-05-18T15:52:40.130Z">2023-05-18</time><p class="is-flex-grow-2 mt-2">
+一、下载Git与Nodejs
+这里可以自行参考网上教程下载
+二、使用hexo创建个人博客
+2.1 创建Blog根目录
+
+在本地创建一个文件夹，此文件夹将用来管理你的个人博客网站，如下图，我再F盘创建了一个git_blog文件夹
+
+然后打开Git bash并输入cd F:/git/blog，如下图
+
+然后再输入命令
+
+npm install hexo-cli -g
+hexo init
+其中hexo init命令可能会失败，可以多试几次，最好挂梯子运行
+全部输入完后，可以发现当前文件夹下多出一些文件夹和相关配置文件。
+
+
+关于这些文件夹，可以先做一个简单的介绍：
+
+node_modules: 依赖包
+public：存放生成的页面
+scaffolds：生成文章的一些模板
+source：用来存放你的文章
+them..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2023/05/18/build_web/">更多</a></section></article><article class="post-item-card"><header class="is-relative is-flex"><div class="post-cover-backdrop is-hidden"><img src="/images/Pytorch2trt/tensorrt_pic.png" alt="loading.."></div><a class="post-cover-link has-text-centered skeleton" href="/2023/05/18/Torch2Trt/"><img class="post-cover-img js-img-fadeIn" src="/images/Pytorch2trt/tensorrt_pic.png" alt="loading.." data-backdrop="true"></a></header><section class="content post-card-content p-4 pb-5"><header><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><i class="tag post-item-tag">深度学习</i></a><a href="/tags/TensorRT"><i class="tag post-item-tag">TensorRT</i></a><a href="/tags/Onnx"><i class="tag post-item-tag">Onnx</i></a></header><h2 class="mt-4 mb-0 is-family-serif"><a href="/2023/05/18/Torch2Trt/">成功解决Pytorch模型转trt模型中得BatchNorm问题</a></h2><time class="has-text-grey" datetime="2023-05-18T06:12:16.513Z">2023-05-18</time><p class="is-flex-grow-2 mt-2">
+问题背景
+如果你想把你的模型投入到应用中或者是想提升模型的运行速度，除了对网络进行压缩、蒸馏外，最好的方法就是将模型转成tensor模型，使用tensorrt实现对网络的加速。但是当该模型的功能是图像增强或者是图像生成，并且模型中运用了大量的batchnorm2d函数，运用网上现成的方法会发现模型转成onnx以及trt后，模型的处理效果大幅下降，想解决此问题就可以详细往下看了：
+我们的方法顺序是：pytorch模型先转成onnx模型，接着将onnx模型转成trt模型
+一、pytorch to onnx
+核心代码：
+import torch
+from torchvision.utils import save_image
+import os
+from nets.tiny_unet_2_channelxian..</p><a class="button is-default mt-2 has-text-weight-semibold" href="/2023/05/18/Torch2Trt/">更多</a></section></article></section><aside class="column is-hidden-mobile is-4-tablet is-3-widescreen"><div style="position: sticky; top: 50px;"><main class="aside-card-container categories-widget category-page"><h3>分类</h3><section><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%BD%BD%E6%9D%BF%E5%BC%80%E5%8F%91/">载板开发</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3/">问题解决</a><span class="category-list-count">5</span></li></ul></section></main></div></aside></div></article><script>$claudia.fadeInImage(null, $claudia.blurBackdropImg)
+
+window.addEventListener('resize', $claudia.throttle(function () {
+    var images = document.querySelectorAll('.js-img-fadeIn')
+
+    images.forEach($claudia.blurBackdropImg)
+}, 150))</script></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/lzule"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><a title="rss" target="_blank" rel="noopener nofollow" href="/atom.xml"><i class="iconfont icon-rss"></i></a><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 李祖乐 2024</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script>$claudia.fadeInImage(null, $claudia.blurBackdropImg)
+
+window.addEventListener('resize', $claudia.throttle(function () {
+    var images = document.querySelectorAll('.js-img-fadeIn')
+
+    images.forEach($claudia.blurBackdropImg)
+}, 150))</script></body></html>

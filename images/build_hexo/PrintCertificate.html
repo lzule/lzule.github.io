@@ -1,0 +1,161 @@
+
+<!-- saved from url=(0095)http://sjjx.ouc.edu.cn:82/ouc_cx/JieTi/PrintCertificate?id=e60b0e0c-320f-4724-8b7f-73ed46990625 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body onload="MyPrint();"><div class="m-content">
+
+
+
+
+    
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <style>
+        body {
+            background-color: #FFF;
+            color: #000;
+        }
+
+        .Main {
+            width: 580px;
+            height: 750px;
+            background: url(http://sjjx.ouc.edu.cn:82/ouc_cx/) no-repeat;
+            font-family: "SimHei", 黑体;
+            margin: 0 auto;
+            overflow: hidden;
+            left: 50%; /*FF IE7*/
+            top: 50%; /*FF IE7*/
+            margin-left: -290px !important; /*FF IE7 该值为本身宽的一半 */
+            margin-top: -375px !important; /*FF IE7 该值为本身高的一半*/
+            margin-left: 0px;
+            margin-top: 0px;
+            position: fixed !important; /*FF IE7*/
+            position: absolute; /*IE6*/
+            _top: expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop + (document.documentElement.clientHeight-this.offsetHeight)/2 : /*IE6*/
+            document.body.scrollTop + (document.body.clientHeight - this.clientHeight)/2); /*IE5 IE5.5*/
+            _left: expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollLeft + (document.documentElement.clientWidth-this.offsetWidth)/2 : /*IE6*/
+            document.body.scrollLeft + (document.body.clientWidth - this.clientWidth)/2); /*IE5 IE5.5*/
+        }
+
+        .BT {
+            width: 380px;
+            height: auto;
+            margin: 80px 100px 0;
+            background: url(http://sjjx.ouc.edu.cn:82/ouc_cx/) no-repeat right bottom;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 36px;
+            overflow: hidden;
+        }
+
+        .z_t1 {
+            font-size: 28px;
+            margin-top: 10px;
+        }
+
+        .z_t2 {
+            font-size: 36px;
+        }
+
+        .long {
+            display: inline-block;
+            transform: scale(1, 1.3);
+            -ms-transform: scale(1, 1.3);
+            -webkit-transform: scale(1, 1.3);
+            -moz-transform: scale(1, 1.3);
+            -o-transform: scale(1, 1.3);
+        }
+
+        .col {
+            color: #336699;
+        }
+
+        .ZT {
+            text-align: center;
+        }
+
+        .ZH {
+            color: #F00;
+            margin: 20px 0;
+        }
+
+        .ZK {
+            font-family: "KaiTi", 楷体;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .BT1 {
+            width: 230px;
+            height: auto;
+            float: right;
+            font-family: "KaiTi", 楷体;
+            text-align: center;
+            line-height: 30px;
+            overflow: hidden;
+        }
+
+       
+    </style>
+
+    <script type="text/javascript">
+
+        function MyPrint() {
+            PageSetup_Null();
+            var headstr = "<html><head><title></title></head><body>";  //打印头部
+            var footstr = "</body></html>";  //打印尾部
+            var printData = document.getElementById("content").innerHTML; //获得 p 里的所有 html 数据
+            var oldstr = document.body.innerHTML;
+            document.body.innerHTML = headstr + printData + footstr;
+            window.print();
+            document.body.innerHTML = oldstr;   //保持原页面格式
+        }
+
+        //去除打印的頁眉和頁脚
+        function PageSetup_Null() {
+            try {
+                var RegWsh = new ActiveXObject("WScript.Shell");
+                RegWsh.RegWrite("HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\header", "");
+                RegWsh.RegWrite("HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\PageSetup\\footer", "");
+            }
+            catch (e) {
+            }
+        }
+    </script>
+
+
+
+
+    <form id="form1">
+        <div id="content" class="content">
+            <div class="Main">
+                <div class="BT">
+                    <div style="height:520px;">
+
+
+                        <input type="hidden" id="WebUrl" value="http://sjjx.ouc.edu.cn:82/ouc_cx">
+                        <input id="BackGroudImageForJieTiPrint" name="BackGroudImageForJieTiPrint" type="hidden" value="">
+                        <input id="YinZhangForJieTiPrint" name="YinZhangForJieTiPrint" type="hidden" value="">
+
+                        <div class="ZT z_t1 col long">2023年立项全国大学生创新创业训练计划项目</div>
+                        <div class="ZT ZH z_t2">结&nbsp;&nbsp;题&nbsp;&nbsp;证&nbsp;&nbsp;明</div>
+                        <div class="ZK z_t2 col">等次：优秀</div>
+                        <div><span class="col">项目名称：</span>基于嵌入式系统的智能钓鱼辅助摄像头研发..</div>
+                        <div><span class="col">项目编号：</span>202310423749X</div>
+                        <div><span class="col">项目类型：</span>创新训练项目</div>
+                        <div><span class="col">项目级别：</span>校级</div>
+                        <div><span class="col">项目主持人：</span>李祖乐</div>
+                        <div><span class="col">项目组成员：</span>罗梒、刘云达、梁德钦</div>
+                        <div><span class="col">指导教师：</span>俞智斌</div>
+                    </div>
+                    <div class="BT1">
+                        <br>
+                        2024年1月8日
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+</div>
+</body></html>
