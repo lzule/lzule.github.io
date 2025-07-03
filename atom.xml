@@ -6,7 +6,7 @@
   <link href="https://lzule.github.io/atom.xml" rel="self"/>
   
   <link href="https://lzule.github.io/"/>
-  <updated>2025-06-13T15:07:25.380Z</updated>
+  <updated>2024-03-29T07:24:25.296Z</updated>
   <id>https://lzule.github.io/</id>
   
   <author>
@@ -15,38 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>闲鱼接单维护</title>
-    <link href="https://lzule.github.io/2025/06/13/backbend/"/>
-    <id>https://lzule.github.io/2025/06/13/backbend/</id>
-    <published>2025-06-13T15:00:41.086Z</published>
-    <updated>2025-06-13T15:07:25.380Z</updated>
-    
-    <content type="html"><![CDATA[<!-- ![cover](/images/Jetson/jetson_ruitai_pic.png) --><h2 id="一、Conda安装">一、Conda安装</h2><ul><li><p>链接地址：<a href="https://conda-forge.org/download/">https://conda-forge.org/download/</a></p></li><li><p>点击就能下载，注意哈是aarch64这个，可能也需要挂梯子<br><img src="/images/backbend/conda_1.png" /></p></li><li><p>安装指令：bash <a href="http://Miniforge3-Linux-aarch64.sh">Miniforge3-Linux-aarch64.sh</a> -b</p></li><li><p>初始化指令：~/miniforge3/bin/conda init</p></li><li><p>重新打开终端即可</p></li></ul>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;!-- ![cover](/images/Jetson/jetson_ruitai_pic.png) --&gt;
-&lt;h2 id=&quot;一、Conda安装&quot;&gt;一、Conda安装&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;链接地址：&lt;a href=&quot;https://conda-forge.org</summary>
-      
-    
-    
-    
-    <category term="载板开发" scheme="https://lzule.github.io/categories/%E8%BD%BD%E6%9D%BF%E5%BC%80%E5%8F%91/"/>
-    
-    
-    <category term="Jetson" scheme="https://lzule.github.io/tags/Jetson/"/>
-    
-    <category term="Pytorch" scheme="https://lzule.github.io/tags/Pytorch/"/>
-    
-    <category term="深度学习" scheme="https://lzule.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
-    
-  </entry>
   
   <entry>
     <title>Jetson nano/Raspberry自启动设置以及取消sudo</title>

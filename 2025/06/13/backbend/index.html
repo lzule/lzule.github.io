@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="appearance-auto" lang="zh-CN"><head><meta charset="UTF-8"><title>闲鱼接单维护</title><meta name="description" content="No Pain No Gain"><meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1"><!-- Google Analytics --><!-- End Google Analytics -->
+<!DOCTYPE html><html class="appearance-auto" lang="zh-CN"><head><meta charset="UTF-8"><title>闲鱼接单维护</title><meta name="robots" content="noindex"><meta name="description" content="No Pain No Gain"><meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, initial-scale=1"><!-- Google Analytics --><!-- End Google Analytics -->
 <!-- Baidu Analytics --><script>var _hmt = _hmt || [];
 (function() {
 var hm = document.createElement("script");
@@ -8,42 +8,81 @@ s.parentNode.insertBefore(hm, s);
 })();</script><!-- End Baidu Analytics --><link rel="icon" href="/images/favicon.ico"><link rel="stylesheet" href="/style/common/bulma.css"><link rel="stylesheet" href="/style/base.css"><link rel="stylesheet" href="/style/common/helper.css"><script src="/js/common.js"></script><link rel="stylesheet" href="/style/post.css"><link rel="stylesheet" href="/style/themes/highlight-theme-light.css"><link rel="stylesheet" href="/style/common/jquery.fancybox.min.css"><script src="/js/highlight.pack.js"></script><meta name="description" content="
 一、Conda安装
 
-
 链接地址：https://conda-forge.org/download/
-
-
 点击就能下载，注意哈是aarch64这个，可能也需要挂梯子
 
-
-
 安装指令：bash Miniforge3-Linux-aarch64.sh -b
-
-
 初始化指令：~/miniforge3/bin/conda init
-
-
 重新打开终端即可
 
+二、Jetson NX换源
 
-"><script src="//unpkg.com/valine/dist/Valine.min.js"></script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="李祖乐的博客" type="application/atom+xml">
-</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">李祖乐's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"><div class="is-full-height" id="postTopic"><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">闲鱼接单维护</p><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">点击返回顶部</p></div></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><main class="container is-max-widescreen content section post-page pt-4 px-4"><div class="columns is-flex-desktop is-justify-content-center is-flex-direction-row-reverse"><div class="column is-3 is-hidden-mobile"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Conda%E5%AE%89%E8%A3%85"><span class="toc-text">一、Conda安装</span></a></li></ol></div><div class="column is-9"><header class="my-4"><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/Pytorch"><i class="tag post-item-tag">Pytorch</i></a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><i class="tag post-item-tag">深度学习</i></a></header><h1 class="mt-0 mb-1 is-family-serif" id="postTitle">闲鱼接单维护</h1><time class="has-text-grey" datetime="2025-06-13T15:00:41.086Z">2025-06-13</time><article class="mt-2 post-content"><!-- ![cover](/images/Jetson/jetson_ruitai_pic.png) -->
+
+sudo cp /etc/apt/sources.list /etc/apt/sources.list.back
+
+
+sudo gedit /etc/apt/sources.list
+
+
+源：
+
+
+# 默认注释了源码仓库，如有需要可自行取消注释
+deb [arch&amp;#x3D;armhf] https:&amp;#x2F;&amp;#x2F;mirrors.ustc.."><script src="//unpkg.com/valine/dist/Valine.min.js"></script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="李祖乐的博客" type="application/atom+xml">
+</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">李祖乐's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"><div class="is-full-height" id="postTopic"><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">闲鱼接单维护</p><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">点击返回顶部</p></div></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><main class="container is-max-widescreen content section post-page pt-4 px-4"><div class="columns is-flex-desktop is-justify-content-center is-flex-direction-row-reverse"><div class="column is-3 is-hidden-mobile"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Conda%E5%AE%89%E8%A3%85"><span class="toc-text">一、Conda安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Jetson-NX%E6%8D%A2%E6%BA%90"><span class="toc-text">二、Jetson NX换源</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">风扇</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">Clash代理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">torchvision</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">MMCV</span></a></div><div class="column is-9"><header class="my-4"><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/Pytorch"><i class="tag post-item-tag">Pytorch</i></a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><i class="tag post-item-tag">深度学习</i></a></header><h1 class="mt-0 mb-1 is-family-serif" id="postTitle">闲鱼接单维护</h1><time class="has-text-grey" datetime="2025-06-13T15:00:41.086Z">2025-06-13</time><article class="mt-2 post-content"><p><img src="/images/Jetson/jetson_ruitai_pic.png" alt="cover"></p>
 <h2 id="一、Conda安装">一、Conda安装</h2>
 <ul>
+<li>链接地址：<a target="_blank" rel="noopener" href="https://conda-forge.org/download/">https://conda-forge.org/download/</a></li>
+<li>点击就能下载，注意哈是aarch64这个，可能也需要挂梯子<br>
+<img src="/images/backbend/conda_1.png" /></li>
+<li>安装指令：bash <a target="_blank" rel="noopener" href="http://Miniforge3-Linux-aarch64.sh">Miniforge3-Linux-aarch64.sh</a> -b</li>
+<li>初始化指令：~/miniforge3/bin/conda init</li>
+<li>重新打开终端即可</li>
+</ul>
+<h2 id="二、Jetson-NX换源">二、Jetson NX换源</h2>
+<ul>
 <li>
-<p>链接地址：<a target="_blank" rel="noopener" href="https://conda-forge.org/download/">https://conda-forge.org/download/</a></p>
+<p>sudo cp /etc/apt/sources.list /etc/apt/sources.list.back</p>
 </li>
 <li>
-<p>点击就能下载，注意哈是aarch64这个，可能也需要挂梯子<br>
-<img src="/images/backbend/conda_1.png" /></p>
+<p>sudo gedit /etc/apt/sources.list</p>
 </li>
 <li>
-<p>安装指令：bash <a target="_blank" rel="noopener" href="http://Miniforge3-Linux-aarch64.sh">Miniforge3-Linux-aarch64.sh</a> -b</p>
-</li>
-<li>
-<p>初始化指令：~/miniforge3/bin/conda init</p>
-</li>
-<li>
-<p>重新打开终端即可</p>
+<p>源：</p>
 </li>
 </ul>
-</article><section class="jump-container is-flex is-justify-content-space-between my-6"><!-- em is empty placeholder--><em></em><a class="button is-default" href="/2024/03/27/Self_Start/" title="Jetson nano/Raspberry自启动设置以及取消sudo"><span class="has-text-weight-semibold">下一页: Jetson nano/Raspberry自启动设置以及取消sudo</span><i class="iconfont icon-next ml-2 has-text-grey"></i></a></section><article class="mt-6 comment-container"><script async repo="lzule/lzule.github.io" src="https://utteranc.es/client.js" issue-term="pathname" theme="preferred-color-scheme"></script></article><article class="mt-6 comment-container" id="vcomments"></article></div></div></main></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/lzule"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><a title="rss" target="_blank" rel="noopener nofollow" href="/atom.xml"><i class="iconfont icon-rss"></i></a><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 李祖乐 2025</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script src="/js/jquery-3.6.1.min.js"></script><script src="/js/jquery-fancybox.min.js"></script><script src="/js/img_zoom.js"></script><script src="/js/post.js"></script></body></html>
+<pre class="line-numbers language-none"><code class="language-none"># 默认注释了源码仓库，如有需要可自行取消注释
+deb [arch&#x3D;armhf] https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x2F; bionic main restricted universe multiverse
+# deb-src https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x2F; bionic main main restricted universe multiverse
+deb [arch&#x3D;armhf] https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-updates main restricted universe multiverse
+# deb-src https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-updates main restricted universe multiverse
+deb [arch&#x3D;armhf] https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-backports main restricted universe multiverse
+# deb-src https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-backports main restricted universe multiverse
+deb [arch&#x3D;armhf] https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-security main restricted universe multiverse
+# deb-src https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-security main restricted universe multiverse
+
+# 预发布软件源，不建议启用
+# deb [arch&#x3D;armhf] https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-proposed main restricted universe multiverse
+# deb-src [arch&#x3D;armhf] https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-proposed main restricted universe multiverse<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1>风扇</h1>
+<p>echo 255 | sudo tee /sys/devices/platform/pwm-fan/hwmon/hwmon*/pwm1</p>
+<h1>Clash代理</h1>
+<p>软件版本：clash-verge_1.7.7_arm64.deb<br>
+代理地址：<a target="_blank" rel="noopener" href="https://dy-2.xn--30rs3bu7r87f.com/csjc/api/v1/client/subscribe?token=fddaf8bcb5a17d0ea18861033082c27a">https://dy-2.慈善机场.com/csjc/api/v1/client/subscribe?token=fddaf8bcb5a17d0ea18861033082c27a</a><br>
+打开命令：WEBKIT_DISABLE_COMPOSITING_MODE=1 clash-verge</p>
+<h1>torchvision</h1>
+<p>Q：ImportError: libopenblas.so.0: cannot open shared object file: No such file or directory<br>
+A：sudo apt-get install libopenblas-dev</p>
+<h1>MMCV</h1>
+<ul>
+<li>源码安装<br>
+cd /home/ai/workspace/<br>
+git clone <a target="_blank" rel="noopener" href="https://github.com/open-mmlab/mmcv.git">https://github.com/open-mmlab/mmcv.git</a>  # 有则不用拉取<br>
+cd mmcv<br>
+MMCV_WITH_OPS=1 pip install -v -e .</li>
+<li>pip安装</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">pip install openmim
+# 使用自动匹配安装(推荐)
+MMCV_WITH_OPS&#x3D;1 pip install mmcv-full<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<!-- flag of hidden posts --></article><section class="jump-container is-flex is-justify-content-space-between my-6"><!-- em is empty placeholder--><em></em></section><article class="mt-6 comment-container"><script async repo="lzule/lzule.github.io" src="https://utteranc.es/client.js" issue-term="pathname" theme="preferred-color-scheme"></script></article><article class="mt-6 comment-container" id="vcomments"></article></div></div></main></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/lzule"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><a title="rss" target="_blank" rel="noopener nofollow" href="/atom.xml"><i class="iconfont icon-rss"></i></a><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 李祖乐 2025</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script src="/js/jquery-3.6.1.min.js"></script><script src="/js/jquery-fancybox.min.js"></script><script src="/js/img_zoom.js"></script><script src="/js/post.js"></script></body></html>

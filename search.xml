@@ -4,35 +4,6 @@
   
     
     <entry>
-      <title>闲鱼接单维护</title>
-      <link href="/2025/06/13/backbend/"/>
-      <url>/2025/06/13/backbend/</url>
-      
-        <content type="html"><![CDATA[<!-- ![cover](/images/Jetson/jetson_ruitai_pic.png) --><h2 id="一、Conda安装">一、Conda安装</h2><ul><li><p>链接地址：<a href="https://conda-forge.org/download/">https://conda-forge.org/download/</a></p></li><li><p>点击就能下载，注意哈是aarch64这个，可能也需要挂梯子<br><img src="/images/backbend/conda_1.png" /></p></li><li><p>安装指令：bash <a href="http://Miniforge3-Linux-aarch64.sh">Miniforge3-Linux-aarch64.sh</a> -b</p></li><li><p>初始化指令：~/miniforge3/bin/conda init</p></li><li><p>重新打开终端即可</p></li></ul>]]></content>
-      
-      
-      <categories>
-          
-          <category> 载板开发 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Jetson </tag>
-            
-            <tag> Pytorch </tag>
-            
-            <tag> 深度学习 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Jetson nano/Raspberry自启动设置以及取消sudo</title>
       <link href="/2024/03/27/Self_Start/"/>
       <url>/2024/03/27/Self_Start/</url>
