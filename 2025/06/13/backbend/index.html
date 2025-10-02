@@ -29,7 +29,7 @@ sudo gedit /etc/apt/sources.list
 
 # 默认注释了源码仓库，如有需要可自行取消注释
 deb [arch&amp;#x3D;armhf] https:&amp;#x2F;&amp;#x2F;mirrors.ustc.."><script src="//unpkg.com/valine/dist/Valine.min.js"></script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="李祖乐的博客" type="application/atom+xml">
-</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">李祖乐's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"><div class="is-full-height" id="postTopic"><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">闲鱼接单维护</p><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">点击返回顶部</p></div></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><main class="container is-max-widescreen content section post-page pt-4 px-4"><div class="columns is-flex-desktop is-justify-content-center is-flex-direction-row-reverse"><div class="column is-3 is-hidden-mobile"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Conda%E5%AE%89%E8%A3%85"><span class="toc-text">一、Conda安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Jetson-NX%E6%8D%A2%E6%BA%90"><span class="toc-text">二、Jetson NX换源</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">风扇</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">Clash代理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">torchvision</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">MMCV</span></a></div><div class="column is-9"><header class="my-4"><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/Pytorch"><i class="tag post-item-tag">Pytorch</i></a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><i class="tag post-item-tag">深度学习</i></a></header><h1 class="mt-0 mb-1 is-family-serif" id="postTitle">闲鱼接单维护</h1><time class="has-text-grey" datetime="2025-06-13T15:00:41.086Z">2025-06-13</time><article class="mt-2 post-content"><p><img src="/images/Jetson/jetson_ruitai_pic.png" alt="cover"></p>
+</head><body class="is-flex is-flex-direction-column"><header class="header-widget is-flex-shrink-0 is-hidden-mobile"><div class="container is-fullhd is-flex is-justify-content-space-between is-align-items-center is-full-height"><section class="is-hidden-mobile is-flex-shrink-0"><h2><a href="/">李祖乐's blog</a></h2></section><h3 class="is-hidden-mobile is-family-serif is-full-height is-flex is-align-items-center is-flex-shrink-0"><div class="is-full-height" id="postTopic"><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">闲鱼接单维护</p><p class="is-full-height is-flex-shrink-0 is-flex is-align-items-center is-justify-content-center">点击返回顶部</p></div></h3><aside class="is-flex-shrink-0"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></aside></div></header><header class="is-flex header-widget is-flex-shrink-0 is-align-items-center is-justify-content-center is-hidden-tablet"><h3 class="is-inline-block"><a href="/">首页</a></h3><h3 class="is-inline-block"><a href="/about">关于</a></h3><h3 class="is-inline-block"><a href="/archives">归档</a></h3></header><main><main class="container is-max-widescreen content section post-page pt-4 px-4"><div class="columns is-flex-desktop is-justify-content-center is-flex-direction-row-reverse"><div class="column is-3 is-hidden-mobile"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Conda%E5%AE%89%E8%A3%85"><span class="toc-text">一、Conda安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Jetson-NX%E6%8D%A2%E6%BA%90"><span class="toc-text">二、Jetson NX换源</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">风扇</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">Clash代理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">torchvision</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">MMCV</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">mmdeploy</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">onnxruntime-gpu</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">cmake</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">mmcv的tensorrt</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">swap</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">mmcv-onnx-engine源码修改</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E5%87%BA"><span class="toc-text">导出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E7%90%86"><span class="toc-text">推理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">编译支持gstreamer的OpenCV</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#python-path"><span class="toc-text">python path</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">检查PYTHONPATH环境变量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">Torchaudio安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">Pytorch安装问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">火狐浏览器问题解决（转圈进不去）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">PIP源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">TIMM安装</span></a></div><div class="column is-9"><header class="my-4"><a href="/tags/Jetson"><i class="tag post-item-tag">Jetson</i></a><a href="/tags/Pytorch"><i class="tag post-item-tag">Pytorch</i></a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><i class="tag post-item-tag">深度学习</i></a></header><h1 class="mt-0 mb-1 is-family-serif" id="postTitle">闲鱼接单维护</h1><time class="has-text-grey" datetime="2025-06-13T15:00:41.086Z">2025-06-13</time><article class="mt-2 post-content"><p><img src="/images/Jetson/jetson_ruitai_pic.png" alt="cover"></p>
 <h2 id="一、Conda安装">一、Conda安装</h2>
 <ul>
 <li>链接地址：<a target="_blank" rel="noopener" href="https://conda-forge.org/download/">https://conda-forge.org/download/</a></li>
@@ -64,6 +64,19 @@ deb [arch&#x3D;armhf] https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x
 # 预发布软件源，不建议启用
 # deb [arch&#x3D;armhf] https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-proposed main restricted universe multiverse
 # deb-src [arch&#x3D;armhf] https:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports&#x2F; bionic-proposed main restricted universe multiverse<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-none"><code class="language-none"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic main restricted universe multiverse
+# deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic main restricted universe multiverse
+deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-updates main restricted universe multiverse
+# deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-updates main restricted universe multiverse
+deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-backports main restricted universe multiverse
+# deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-backports main restricted universe multiverse
+deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-security main restricted universe multiverse
+# deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-security main restricted universe multiverse
+
+# 预发布软件源，不建议启用
+# deb http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-proposed main restricted universe multiverse
+# deb-src http:&#x2F;&#x2F;mirrors.ustc.edu.cn&#x2F;ubuntu-ports bionic-proposed main restricted universe multiverse<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h1>风扇</h1>
 <p>echo 255 | sudo tee /sys/devices/platform/pwm-fan/hwmon/hwmon*/pwm1</p>
 <h1>Clash代理</h1>
@@ -85,4 +98,172 @@ MMCV_WITH_OPS=1 pip install -v -e .</li>
 <pre class="line-numbers language-none"><code class="language-none">pip install openmim
 # 使用自动匹配安装(推荐)
 MMCV_WITH_OPS&#x3D;1 pip install mmcv-full<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<!-- flag of hidden posts --></article><section class="jump-container is-flex is-justify-content-space-between my-6"><!-- em is empty placeholder--><em></em></section><article class="mt-6 comment-container"><script async repo="lzule/lzule.github.io" src="https://utteranc.es/client.js" issue-term="pathname" theme="preferred-color-scheme"></script></article><article class="mt-6 comment-container" id="vcomments"></article></div></div></main></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/lzule"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><a title="rss" target="_blank" rel="noopener nofollow" href="/atom.xml"><i class="iconfont icon-rss"></i></a><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 李祖乐 2025</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script src="/js/jquery-3.6.1.min.js"></script><script src="/js/jquery-fancybox.min.js"></script><script src="/js/img_zoom.js"></script><script src="/js/post.js"></script></body></html>
+<h1>mmdeploy</h1>
+<pre class="line-numbers language-none"><code class="language-none"># 为之后编译 MMDeploy 设置环境变量
+export TENSORRT_DIR&#x3D;&#x2F;usr&#x2F;include&#x2F;aarch64-linux-gnu
+
+# 将 cuda 路径和 lib 路径写入到环境变量 &#96;$PATH&#96; 和 &#96;$LD_LIBRARY_PATH&#96; 中， 为之后编译 MMDeploy 做准备
+export PATH&#x3D;$PATH:&#x2F;usr&#x2F;local&#x2F;cuda&#x2F;bin
+export LD_LIBRARY_PATH&#x3D;$LD_LIBRARY_PATH:&#x2F;usr&#x2F;local&#x2F;cuda&#x2F;lib64
+git clone -b main --recursive https:&#x2F;&#x2F;github.com&#x2F;open-mmlab&#x2F;mmdeploy.git
+cd mmdeploy
+export MMDEPLOY_DIR&#x3D;$(pwd)
+mkdir -p build &amp;&amp; cd build
+cmake .. -DMMDEPLOY_TARGET_BACKENDS&#x3D;&quot;trt&quot;
+make -j$(nproc) &amp;&amp; make install
+cd $&#123;MMDEPLOY_DIR&#125;
+pip install -v -e .<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>onnx</p>
+<pre class="line-numbers language-none"><code class="language-none"># Arm not have 1.8.1 version package
+wget https:&#x2F;&#x2F;github.com&#x2F;microsoft&#x2F;onnxruntime&#x2F;releases&#x2F;download&#x2F;v1.10.0&#x2F;onnxruntime-linux-aarch64-1.10.0.tgz
+
+tar -zxvf onnxruntime-linux-aarch64-1.10.0.tgz
+cd onnxruntime-linux-aarch64-1.10.0
+export ONNXRUNTIME_DIR&#x3D;$(pwd)
+export LD_LIBRARY_PATH&#x3D;$ONNXRUNTIME_DIR&#x2F;lib:$LD_LIBRARY_PATH
+
+cd $&#123;MMDEPLOY_DIR&#125; # To MMDeploy root directory
+mkdir -p build &amp;&amp; cd build
+cmake -DMMDEPLOY_TARGET_DEVICES&#x3D;&#39;cuda&#39; -DMMDEPLOY_TARGET_BACKENDS&#x3D;ort -DONNXRUNTIME_DIR&#x3D;$&#123;ONNXRUNTIME_DIR&#125; ..
+make -j$(nproc) &amp;&amp; make install<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>/home/pyset/Desktop/my_file/mmdeploy/mmdeploy/lib/libmmdeploy_onnxruntime_ops.so</p>
+<h1>onnxruntime-gpu</h1>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone <span class="token parameter variable">--recursive</span> https://github.com/Microsoft/onnxruntime.git
+<span class="token function">git</span> checkout <span class="token parameter variable">-b</span> v1.10.0 v1.10.0
+<span class="token function">git</span> submodule update <span class="token parameter variable">--init</span> <span class="token parameter variable">--recursive</span> <span class="token parameter variable">--progress</span>
+./build.sh <span class="token parameter variable">--config</span> Release <span class="token parameter variable">--update</span> <span class="token parameter variable">--build</span> <span class="token parameter variable">--parallel</span> <span class="token parameter variable">--build_wheel</span> <span class="token parameter variable">--use_cuda</span> <span class="token parameter variable">--cuda_home</span> /usr/local/cuda <span class="token parameter variable">--cudnn_home</span> /usr/lib/aarch64-linux-gnu
+pip3 <span class="token function">install</span> build/Linux/Release/dist/*.whl<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1>cmake</h1>
+<ul>
+<li>方法一：编译安装cmake<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token parameter variable">-y</span> protobuf-compiler libprotobuf-dev openssl   libssl-dev libcurl4-openssl-dev
+<span class="token function">wget</span> https://github.com/Kitware/CMake/releases/download/v3.13.5/cmake-3.13.5.tar.gz
+<span class="token function">tar</span> xvf cmake-3.13.5.tar.gz
+<span class="token function">rm</span> cmake-3.13.5.tar.gz
+<span class="token builtin class-name">cd</span> cmake-3.13.5/
+./bootstrap --system-curl
+<span class="token function">make</span> -j<span class="token variable"><span class="token variable">$(</span>nproc<span class="token variable">)</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>方法二：直接下载aarch版本的tar.gz，使用已经编译好的就行<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span>/home/pyset/Downloads/cmake-3.26.0/bin/:<span class="token environment constant">$PATH</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+</ul>
+<h1>mmcv的tensorrt</h1>
+<ul>
+<li>trtexec使用<br>
+/usr/src/tensorrt/bin/trtexec --onnx=best.onnx --saveEngine=best.engine --device=0 --plugins=/home/pyset/Desktop/my_file/mmdeploy/mmdeploy/lib/libmmdeploy_tensorrt_ops.so</li>
+<li>tensorrt-import</li>
+</ul>
+<p>在exporter.py中</p>
+<h1>swap</h1>
+<pre class="line-numbers language-none"><code class="language-none"># 请在系统 shell（无需进入 venv）里执行
+sudo fallocate -l 4G &#x2F;swapfile
+sudo chmod 600 &#x2F;swapfile
+sudo mkswap &#x2F;swapfile
+sudo swapon &#x2F;swapfile
+
+# 验证一下
+free -h
+
+sudo swapoff &#x2F;swapfile
+sudo rm &#x2F;swapfile
+
+free -h   # 确认 Swap 行已变回 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1>mmcv-onnx-engine源码修改</h1>
+<p><img src="" alt="修改源代码"></p>
+<h2 id="导出">导出</h2>
+<ul>
+<li>ultralytics\engine\exporter.py 699-line</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">success &#x3D; ctypes.CDLL(&quot;&#x2F;home&#x2F;pyset&#x2F;Desktop&#x2F;my_file&#x2F;mmdeploy&#x2F;mmdeploy&#x2F;lib&#x2F;libmmdeploy_tensorrt_ops.so&quot;, mode &#x3D; ctypes.RTLD_GLOBAL)
+        if not success:
+            print(&quot;load custom_op plugin error&quot;)
+            raise Exception()
+        logger &#x3D; trt.Logger(trt.Logger.INFO)
+        trt.init_libnvinfer_plugins(trt.Logger(), &#39;&#39;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="推理">推理</h2>
+<ul>
+<li>ultralytics\nn\autobackend.py 190-line</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">session_options &#x3D; onnxruntime.SessionOptions()
+            session_options.register_custom_ops_library(so_path)
+            # Create an inference session using the ONNX model and specify execution providers
+            providers &#x3D; [&quot;CUDAExecutionProvider&quot;, &quot;CPUExecutionProvider&quot;] if cuda else [&quot;CPUExecutionProvider&quot;]
+            session &#x3D; onnxruntime.InferenceSession(w, sess_options&#x3D;session_options, providers&#x3D;providers)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>ultralytics\nn\autobackend.py 237-line</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">success &#x3D; ctypes.CDLL(&quot;&#x2F;home&#x2F;pyset&#x2F;Desktop&#x2F;my_file&#x2F;mmdeploy&#x2F;mmdeploy&#x2F;lib&#x2F;libmmdeploy_tensorrt_ops.so&quot;, mode &#x3D; ctypes.RTLD_GLOBAL)
+            if not success:
+                print(&quot;load custom_op plugin error&quot;)
+                raise Exception()
+            logger &#x3D; trt.Logger(trt.Logger.INFO)
+            trt.init_libnvinfer_plugins(trt.Logger(), &#39;&#39;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1>编译支持gstreamer的OpenCV</h1>
+<ol>
+<li>卸载原有opencv</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">sudo apt-get purge libopencv*
+sudo apt-get update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>下载opencv source包</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">https:&#x2F;&#x2F;opencv.org&#x2F;releases&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ol start="3">
+<li>解压缩并build</li>
+</ol>
+<pre class="line-numbers language-none"><code class="language-none">cd opencv-xxx
+mkdir build
+cd build
+cmake -D CMAKE_BUILD_TYPE&#x3D;RELEASE -D CMAKE_INSTALL_PREFIX&#x3D;&#x2F;usr&#x2F;local -D OPENCV_GENERATE_PKGCONFIG&#x3D;ON -D BUILD_EXAMPLES&#x3D;OFF -D INSTALL_PYTHON_EXAMPLES&#x3D;OFF -D INSTALL_C_EXAMPLES&#x3D;OFF -D BUILD_opencv_python2&#x3D;OFF -D BUILD_opencv_python3&#x3D;ON -D PYTHON_DEFAULT_EXECUTABLE&#x3D;$(which python3) -D PYTHON3_EXECUTABLE&#x3D;$(which python3) -D PYTHON3_INCLUDE_DIR&#x3D;$(python3 -c &quot;from distutils.sysconfig import get_python_inc; print(get_python_inc())&quot;) -D PYTHON3_LIBRARY&#x3D;$(find &#x2F;usr&#x2F;lib -name &quot;libpython3*.so&quot; | head -1) -D PYTHON3_PACKAGES_PATH&#x3D;$(python3 -c &quot;from distutils.sysconfig import get_python_lib; print(get_python_lib())&quot;) -D PYTHON3_NUMPY_INCLUDE_DIRS&#x3D;$(python3 -c &quot;import numpy; print(numpy.get_include())&quot;) -D WITH_GSTREAMER&#x3D;ON -D BUILD_opencv_dnn&#x3D;OFF ..
+
+make -j8
+sudo make install<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="3">
+<li></li>
+</ol>
+<ul>
+<li></li>
+</ul>
+<h3 id="python-path">python path</h3>
+<h1>检查PYTHONPATH环境变量</h1>
+<pre class="line-numbers language-none"><code class="language-none">echo $PYTHONPATH
+# 如果有不相关的路径，临时清除
+unset PYTHONPATH
+PYTHONNOUSERSITE&#x3D;1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h1>Torchaudio安装</h1>
+<ul>
+<li>git clone --recursive --branch v2.4.1 <a target="_blank" rel="noopener" href="https://github.com/pytorch/audio">https://github.com/pytorch/audio</a></li>
+<li>cd audio</li>
+<li>BUILD_SOX=1 USE_FFMPEG=0 MAX_JOBS=5 USE_CUDA=1 pip install -v -e . --no-build-isolation</li>
+<li>其中如果编译过程中有报错，需要给报错文件添加#include ‘float.h’，编译才能通过</li>
+</ul>
+<h1>Pytorch安装问题</h1>
+<p>如果出现import torch ERROR，则是因为隔离了当前环境，使用命令：pip install -v -e . --no-build-isolation<br>
+“5.3;6.2;7.2”<br>
+如果出现安装torch时编译flash_attention出错，可以选择先不编译flash_attention<br>
+USE_FLASH_ATTENTION=0 MAX_JOBS=6 python <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a> bdist<br>
+sudo apt-get install git g++ pkg-config curl  zip zlib1g-dev libopenblas-base libopenmpi-dev  -y<br>
+sudo apt-get install libomp5<br>
+pip install numpy==1.23.2</p>
+<h1>火狐浏览器问题解决（转圈进不去）</h1>
+<pre class="line-numbers language-none"><code class="language-none"># 卸载snap版本
+sudo snap remove firefox
+
+# 添加Mozilla官方PPA
+sudo add-apt-repository ppa:mozillateam&#x2F;ppa
+sudo apt update
+
+sudo rm &#x2F;usr&#x2F;bin&#x2F;firefox
+
+# 重新安装firefox，确保所有文件都正确安装
+sudo apt remove firefox
+sudo apt autoremove
+# 或者安装firefox-esr（更稳定的版本）
+sudo apt install firefox-esr<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1>PIP源</h1>
+<p>pip config set global.index-url <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple">https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple</a></p>
+<p>sudo sh -c ‘echo 255 &gt; /sys/devices/pwm-fan/target_pwm’</p>
+<h1>TIMM安装</h1>
+<pre class="line-numbers language-none"><code class="language-none"># 先安装一个兼容的 huggingface_hub 版本
+pip install &quot;huggingface_hub&lt;0.20.0&quot;
+# 然后再安装 timm
+pip install timm&#x3D;&#x3D;1.0.10<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><!-- flag of hidden posts --></article><section class="jump-container is-flex is-justify-content-space-between my-6"><!-- em is empty placeholder--><em></em></section><article class="mt-6 comment-container"><script async repo="lzule/lzule.github.io" src="https://utteranc.es/client.js" issue-term="pathname" theme="preferred-color-scheme"></script></article><article class="mt-6 comment-container" id="vcomments"></article></div></div></main></main><footer class="is-flex is-flex-direction-column is-align-items-center is-flex-shrink-0 is-family-serif"><section class="sns-container"><!-- Github--><a title="github" target="_blank" rel="noopener nofollow" href="//github.com/lzule"><i class="iconfont icon-github"></i></a><!-- Ins--><!-- RSS--><a title="rss" target="_blank" rel="noopener nofollow" href="/atom.xml"><i class="iconfont icon-rss"></i></a><!-- 知乎--><!-- 领英--><!-- 脸书--></section><p><span>Copyright ©</span><span> 李祖乐 2025</span></p><div class="is-flex is-justify-content-center is-flex-wrap-wrap"><p>Powered by Hexo &verbar;&nbsp;</p><p class="is-flex is-justify-content-center"><a title="Hexo theme author" target="_blank" rel="noopener" href="//github.com/haojen">Theme by Haojen&nbsp;</a></p><div style="margin-top: 2px"><a class="github-button" title="github-button" target="_blank" rel="noopener" href="https://github.com/haojen/hexo-theme-Claudia" data-color-scheme="no-preference: light; light: light; dark: dark;" data-show-count="true"></a></div></div><div><span></span></div></footer><script async defer src="https://buttons.github.io/buttons.js"></script><script src="/js/jquery-3.6.1.min.js"></script><script src="/js/jquery-fancybox.min.js"></script><script src="/js/img_zoom.js"></script><script src="/js/post.js"></script></body></html>
